@@ -24,7 +24,7 @@ css: tokens.css      # in the document frontmatter, after format: house-html
 | `--radius` | Corner radius | `2px` |
 | `--toc-w`, `--page` | Contents width, maximum content width | leave alone |
 
-The house stylesheet swaps the palette tokens (everything except fonts, radius and widths) under `@media (prefers-color-scheme: dark)`. A `tokens.css` that sets only the light palette leaves dark mode on the neutral dark palette. To brand dark mode, add your own `@media (prefers-color-scheme: dark)` block to `tokens.css`; it needs the selector `:root:not([data-theme="light"])` to outrank the house block.
+The house format has a light palette only. It follows no OS dark setting, so the page stays on `--paper` whatever the viewer's system uses.
 
 ## Contrast
 

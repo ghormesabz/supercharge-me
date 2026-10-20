@@ -4,7 +4,7 @@ Part B is the build detail, written like a software architect's design pack. A b
 
 The architecture figures lead. B1 and B2 come before any table. Keep prose above each figure to a sentence or two.
 
-The list is fixed and is never renumbered. If a section does not apply, keep its heading and write `Not applicable.` with the reason. Tag claims as in [part-a.md](part-a.md). Use the vocabulary in [principles.md](principles.md): a **component** is a system-level thing, a **module** is a code-level thing.
+The list is fixed and is never renumbered. If a section does not apply, keep its heading and write `Not applicable.` with the reason. Tag claims as in [part-a.md](part-a.md). A Part B claim tagged Interpreted, Assumption or Open carries a Q link to A7, as in Part A. Use the vocabulary in [principles.md](principles.md): a **component** is a system-level thing, a **module** is a code-level thing.
 
 Failure paths fail loud. Every failure row, in B2 and B4, says who sees the failure and how. A retry, fallback or degrade path exists only when a B13 row records it.
 

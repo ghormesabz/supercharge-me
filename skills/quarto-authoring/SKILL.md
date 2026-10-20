@@ -5,7 +5,7 @@ description: Use when producing an HTML deliverable from Markdown or a .qmd, suc
 
 # Quarto authoring
 
-One `.qmd` becomes one self-contained HTML file in the **house** format: a single reading column, one accent, flat surfaces, system fonts, light and dark. The frontmatter stays at five lines because the design lives in an installed Quarto format extension.
+One `.qmd` becomes one self-contained HTML file in the **house** format: a single reading column, one accent, flat surfaces, system fonts, light only. The frontmatter stays at five lines because the design lives in an installed Quarto format extension.
 
 ## Prerequisites
 

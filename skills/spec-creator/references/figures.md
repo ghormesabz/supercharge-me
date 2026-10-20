@@ -33,7 +33,7 @@ A node is a list item: `- [Kind]{.k} **Name** [new]{.new}`, then `\` and a line 
 
 ## B2 system flow: `.pipe`
 
-Inside `.pipe`, alternate `.stage` and `.hand`. A stage kind is one of `.trigger`, `.model`, `.api`, `.store`, `.human`. Its first paragraph is the kind label, then the stage name, then one short sentence of about 12 words or fewer. A `.hand` holds the contract name in backticks and renders as an arrow. A contract name of up to about 20 characters fits above its arrow. Add `.dashed` to a `.hand` for an optional or asynchronous hop. A stage that can fail holds `::: {.alt}` with `If it fails:` and who sees it.
+Inside `.pipe`, alternate `.stage` and `.hand`. A stage kind is one of `.trigger`, `.model`, `.api`, `.store`, `.human`. Its first paragraph is the kind label, then the stage name, then one short sentence of about 12 words or fewer. A `.hand` holds the contract name in backticks and renders as an arrow. A contract name of up to 10 characters fits above its arrow, whatever the number of stages. The arrow label is a fixed 5.5rem wide and breaks mid-word past that. `check-spec.sh` fails on a longer name, so pick contract names of 10 characters or fewer in B5 and use them everywhere. Add `.dashed` to a `.hand` for an optional or asynchronous hop. A stage that can fail holds `::: {.alt}` with `If it fails:` and who sees it.
 
 Six stages or fewer per pipe. Split a longer flow into two pipes, each in its own `.fig`, captioned `Figure B2a.` and `Figure B2b.`. Draw a stage that is sometimes skipped with a `.dashed` hand into it, and say in the caption when it is skipped.
 

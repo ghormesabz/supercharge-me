@@ -57,8 +57,8 @@ Context is what the user pastes or names by path: files and folders. A folder me
 3. **Context.** Read what the user supplied. If it holds a secret, follow the Rules before you ask anything.
 4. **Grill.** Call `supercharge-me:interview-me` in Rounds Mode with the tree in [references/grill-seed.md](references/grill-seed.md). It ends with a restate. Wait for an explicit yes before writing anything.
 5. **Design.** Follow [references/design.md](references/design.md). Write `tokens.css`.
-6. **Write.** `mkdir -p OUT/docs/spec/SLUG`. Follow `supercharge-me:quarto-authoring` Workflow step 1 to install the house format into that folder. Copy `assets/spec-template.qmd` to `spec.qmd`, and `assets/figures.css` and `assets/render.sh` beside it. Fill every placeholder. Part A: [references/part-a.md](references/part-a.md). Part B: [references/part-b.md](references/part-b.md). Figures: [references/figures.md](references/figures.md). The section lists are fixed and never renumbered.
-7. **Render and check.** `bash OUT/docs/spec/SLUG/render.sh`, then `bash ${CLAUDE_PLUGIN_ROOT}/scripts/check-spec.sh OUT/docs/spec/SLUG` and the manual checks below. Fix and re-render until the script exits 0.
+6. **Write.** `mkdir -p OUT/docs/spec/SLUG`. Follow `supercharge-me:quarto-authoring` Workflow step 1 to install the house format into that folder. Copy `assets/spec-template.qmd` to `spec.qmd`, and `assets/figures.css` and `assets/render.sh` beside it. Read the copied `spec.qmd` before you write to it, or the write is refused. Fill every placeholder. Part A: [references/part-a.md](references/part-a.md). Part B: [references/part-b.md](references/part-b.md). Figures: [references/figures.md](references/figures.md). The section lists are fixed and never renumbered.
+7. **Render and check.** `bash OUT/docs/spec/SLUG/render.sh`, run on its own and not piped, so its exit code is the one you read. Then `bash ${CLAUDE_PLUGIN_ROOT}/scripts/check-spec.sh OUT/docs/spec/SLUG` and the manual checks below. Fix and re-render until the script exits 0.
 8. **Report.** List the files and sizes; the number of claims at each tag; the Open questions with owners; the register counts (Locked, Deferred, Experiment, Open); the design source and any tokens left at the default; anything skipped, such as the figure check without a browser. If the design names a web font, say that the viewer's browser fetches it.
 9. **Commit, tag, init: only on a yes.** If `OUT` is not a git repo and the grilled stack is Python, offer `uv init --bare --vcs git` in `OUT` (never plain `uv init`, which adds `main.py` and `README.md`). For any other stack, ask which init to run. Check `git tag -l spec-SLUG-draft`. Ask in plain text: commit `docs/spec/SLUG/` and tag it `spec-SLUG-draft`? If the tag exists, say the question moves it. Do nothing until the user says yes. Then run `git add docs/spec/SLUG && git commit -m "Add SLUG scoping spec for review" -- docs/spec/SLUG` and `git tag spec-SLUG-draft` (`git tag -f` only when the yes covered the move). `--mode final` compares against that tag.
 
@@ -94,7 +94,7 @@ Run `check-spec.sh` on the spec folder and report each line. Writes nothing.
 
 | Line | Check |
 |:--|:--|
-| Outputs | The HTML for the mode exists. `design-review.html` on draft; `design-sheet.html` and `build-spec.html` on final |
+| Outputs | The HTML for the mode exists and is newer than `spec.qmd`. `design-review.html` on draft; `design-sheet.html` and `build-spec.html` on final |
 | Placeholders | `spec.qmd` holds no `{{` and no `<!--` |
 | Part B | Absent from `design-sheet.html`, present once in the others. If both show Part B, the installed Quarto ignores `when-meta`: stop and tell the user |
 | Banner | Present in `design-review.html`, absent in the final copies |
@@ -103,6 +103,8 @@ Run `check-spec.sh` on the spec folder and report each line. Writes nothing.
 | Figures (`MANUAL`) | Run `bash ${CLAUDE_PLUGIN_ROOT}/scripts/figure-shots.sh` per [references/figures.md](references/figures.md) and look at every PNG. Without a browser, say so |
 | Size | Each HTML is 3,000,000 bytes or less |
 | Writing | No em dashes or hype words. Filler adverbs print as `REVIEW`: cut each hit unless it carries emphasis or contrast |
+| Contract names | Every contract name on a pipe arrow is 10 characters or fewer |
+| Tags and Q links | Every Interpreted, Assumption and Open tag has a Q link, every Q link has an anchor, and every Open row in B13 is named in A7 |
 | Secrets | No key, token, password or connection string value |
 | Register | B13 holds only valid statuses. Every Deferred row names a trigger, every Experiment a kill condition |
 | Hand-off (final) | `AGENTS.md` exists at `OUT`, 60 lines or fewer, and `CLAUDE.md` is `@AGENTS.md` |

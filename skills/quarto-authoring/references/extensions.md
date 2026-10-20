@@ -54,4 +54,4 @@ Render at render time with `quarto render doc.qmd --to house-html`.
 
 1. Edit `house.scss`. Defaults go in the `scss:defaults` section, rules in `scss:rules`.
 2. Express every colour, font and radius in the rules through the CSS custom properties in `:root`, so `tokens.css` can override them.
-3. Install the edited copy into a scratch folder and render `assets/template.qmd`. Look at the result in a browser, light and dark.
+3. Install the edited copy into a scratch folder and render `assets/template.qmd`. Look at the result in a browser.

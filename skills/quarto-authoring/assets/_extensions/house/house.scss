@@ -76,22 +76,6 @@ $toc-color: $house-ink-soft !default;
   --page: 70rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --ink: #ececea;
-    --ink-soft: #a8a8a2;
-    --paper: #151515;
-    --paper-alt: #1e1e1e;
-    --line: #3a3a37;
-    --accent: #8ab4ff;
-    --on-accent: #151515;
-    --ok: #4cc27a;
-    --warn: #e3a63a;
-    --bad: #ff8a7a;
-    color-scheme: dark;
-  }
-}
-
 // ------------------------------------------------------------------ base
 body {
   background: var(--paper);

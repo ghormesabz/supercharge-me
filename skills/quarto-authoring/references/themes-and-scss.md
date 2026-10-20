@@ -40,7 +40,7 @@ theme:
 respect-user-color-scheme: true   # follow the OS; Quarto 1.7+, needs JavaScript
 ```
 
-The house format does not compile a second theme. It republishes colours as CSS custom properties and swaps them under `@media (prefers-color-scheme: dark)`. See `tokens.md`.
+That is for a theme outside the house format. The house format is light only and compiles one theme. It republishes colours as CSS custom properties. See `tokens.md`.
 
 ## `_brand.yml`
 

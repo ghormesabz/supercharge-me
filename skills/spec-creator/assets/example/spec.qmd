@@ -226,12 +226,15 @@ Figure A3. One complaint from arrival to a sent reply. The officer decides at th
 | [Q1]{#q1} | About 1,200 complaints arrive a month | SME | Sets how fast a draft must appear and how much to test | |
 | [Q2]{#q2} | The types are the five on the current complaint form | SME | Decides how complaints are sorted | |
 | [Q3]{#q3} | A draft within 2 minutes is fast enough | SME | Sets the speed target | |
-| [Q4]{#q4} | Open: nobody has said who reviews drafts on weekends | Complaints team lead | Decides whether weekend drafts wait until Monday | |
+| [Q4]{#q4} | Open: nobody has said who reviews drafts on weekends | Complaints team lead | Decides whether weekend drafts wait until Monday (B13 D5) | |
 | [Q5]{#q5} | An officer approves every reply before it is sent | SME | Confirms replies are never sent without a person | |
 | [Q6]{#q6} | "Never state a refund amount" covers every reply, not only hardship ones | SME | Decides how strict the draft check is | |
 | [Q7]{#q7} | 250 words is the longest acceptable reply | SME | Sets the length limit on drafts | |
 | [Q8]{#q8} | Open: the policy library size and format are not known | Client IT | Decides how the policy wording is found | |
 | [Q9]{#q9} | The assistant may read the shared inbox and nothing else in the mail system | Client IT | Decides what access to request | |
+| [Q10]{#q10} | Drafts and classifications are kept for 90 days | SME | Sets how long complaint text stays in the triage store | |
+| [Q11]{#q11} | Open: nobody has checked whether the hosted model provider trains on what we send | Client IT | Decides whether the provider's terms allow complaint text | |
+| [Q12]{#q12} | The assistant must work weekdays 7am to 7pm and no other hours | SME | Sets how the service is hosted and monitored | |
 
 ::: {.content-visible when-meta="builder"}
 
@@ -330,7 +333,7 @@ A complaint reaches the shared inbox.
 :::
 
 ::: {.hand}
-`ComplaintIn`
+`Complaint`
 :::
 
 ::: {.stage .model}
@@ -346,7 +349,7 @@ If it fails: the officer sees the raw email marked not classified.
 :::
 
 ::: {.hand}
-`Classification`
+`TriageTag`
 :::
 
 ::: {.stage .store}
@@ -362,7 +365,7 @@ If it fails: drafting stops and the officer is told.
 :::
 
 ::: {.hand}
-`PolicyExcerpt`
+`Clause`
 :::
 
 ::: {.stage .model}
@@ -390,7 +393,7 @@ Approves, edits or rejects.
 :::
 
 ::: {.hand}
-`ApprovedReply`
+`FinalReply`
 :::
 
 ::: {.stage .api}
@@ -428,9 +431,9 @@ Module map.
 
 | Module | Interface | Hides | Seam and adapters | Slice |
 |:-------|:----------|:------|:------------------|:------|
-| `intake` | `next_complaint() -> ComplaintIn` | Mailbox protocol and parsing | Mail source: fixture folder, shared inbox | 1 |
-| `triage` | `triage(ComplaintIn) -> DraftReply` | Prompts, clause lookup, model retries | Model client: hosted model, recorded fake | 1 |
-| `review` | `submit(DraftReply, decision) -> ApprovedReply` | Case system write and the audit record | Case system: real system, in-memory fake | 2 |
+| `intake` | `next_complaint() -> Complaint` | Mailbox protocol and parsing | Mail source: fixture folder, shared inbox | 1 |
+| `triage` | `triage(Complaint) -> DraftReply` | Prompts, clause lookup, model retries | Model client: hosted model, recorded fake | 1 |
+| `review` | `submit(DraftReply, decision) -> FinalReply` | Case system write and the audit record | Case system: real system, in-memory fake | 2 |
 
 ## B4 Model call cards {#b4}
 
@@ -444,10 +447,10 @@ Model tier
 : Mid-size, hosted, structured output.
 
 Inputs
-: `ComplaintIn`, with account numbers masked first.
+: `Complaint`, with account numbers masked first.
 
 Output
-: `Classification`.
+: `TriageTag`.
 
 Grounding
 : Prompt context only: the five types and what each means.
@@ -475,7 +478,7 @@ Model tier
 : Mid-size, hosted, structured output.
 
 Inputs
-: `ComplaintIn` (masked) and `PolicyExcerpt`.
+: `Complaint` (masked) and `Clause`.
 
 Output
 : `DraftReply`.
@@ -500,13 +503,13 @@ Budget
 
 | Contract | Carries | Produced by | Read by |
 |:---------|:--------|:------------|:--------|
-| `ComplaintIn` | The complaint as received | Email arrives | Classify, Draft reply |
-| `Classification` | Type, urgency, reason | Classify | Find policy, Officer review |
-| `PolicyExcerpt` | The clause that applies | Find policy | Draft reply |
+| `Complaint` | The complaint as received | Email arrives | Classify, Draft reply |
+| `TriageTag` | Type, urgency, reason | Classify | Find policy, Officer review |
+| `Clause` | The clause that applies | Find policy | Draft reply |
 | `DraftReply` | The proposed reply | Draft reply | Officer review |
-| `ApprovedReply` | The reply the officer decided on | Officer review | Send reply |
+| `FinalReply` | The reply the officer decided on | Officer review | Send reply |
 
-`ComplaintIn`
+`Complaint`
 
 ```json
 {
@@ -518,7 +521,7 @@ Budget
 }
 ```
 
-`Classification`
+`TriageTag`
 
 ```json
 {
@@ -529,7 +532,7 @@ Budget
 }
 ```
 
-`PolicyExcerpt`
+`Clause`
 
 ```json
 {
@@ -551,7 +554,7 @@ Budget
 }
 ```
 
-`ApprovedReply`
+`FinalReply`
 
 ```json
 {
@@ -576,7 +579,7 @@ Three environments: development on a laptop with the fixture folder and the reco
 
 ## B8 Security and privacy {#b8}
 
-Complaint text holds names, addresses and account numbers. Account numbers are masked before any model call (D3). Drafts and classifications are kept for 90 days ([Assumption]{.tag .assumption}). Only officers and team leads read them. The hosted model must not train on inputs: [Open]{.tag .open} with Client IT.
+Complaint text holds names, addresses and account numbers. Account numbers are masked before any model call (D3). Drafts and classifications are kept for 90 days ([Assumption]{.tag .assumption} [Q10](#q10){.qref}). Only officers and team leads read them. The hosted model must not train on inputs: [Open]{.tag .open} [Q11](#q11){.qref} with Client IT.
 
 ## B9 Non-functional targets {#b9}
 
@@ -584,13 +587,13 @@ Complaint text holds names, addresses and account numbers. Account numbers are m
 |:--------|:-------|:------|
 | Draft ready after a complaint arrives | 2 minutes | [Assumption]{.tag .assumption} [Q3](#q3){.qref} |
 | Classification accuracy | 90% or better | [Assumption]{.tag .assumption} [Q2](#q2){.qref} |
-| Availability | Weekdays 7am to 7pm | [Assumption]{.tag .assumption} |
+| Availability | Weekdays 7am to 7pm | [Assumption]{.tag .assumption} [Q12](#q12){.qref} |
 
 ## B10 Tests and acceptance {#b10}
 
 | Check | How it runs | Passes when |
 |:------|:------------|:------------|
-| C1 Intake contract | Run `intake` on every fixture email | Every result matches `ComplaintIn` |
+| C1 Intake contract | Run `intake` on every fixture email | Every result matches `Complaint` |
 | C2 Classification eval | Run `triage` on the 100 labelled complaints | Accuracy is 90% or better |
 | C3 Draft eval | Two officers score 20 drafts | 80% or more are usable with light edits |
 | C4 Hardship rule | Run `triage` on the 10 hardship fixtures | Every draft names the hardship team |

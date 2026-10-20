@@ -35,7 +35,7 @@ In the front matter, the author is the person or team the user names at the rest
 
 **A6 Out of scope.** What someone would reasonably expect and is not being built. One line each, with a reason where it helps.
 
-**A7 Review questions.** One row for every Interpreted and Assumption claim, and for every Open item. Phrase it as what we assumed, so a reviewer can answer yes or give a correction. Who is `SME`, `builder`, `client`, or a named role such as `Client IT`. Why it matters says what the answer changes. Leave Answer empty in a draft. Number questions from Q1 and give each an anchor: `[Q1]{#q1}`. Rows for the builder or client show in both copies, so word them in plain terms too.
+**A7 Review questions.** One row for every Interpreted and Assumption claim, and for every Open item, wherever it sits in the spec. That includes Part B claims and every Open row in B13: the row names the B13 ID, for example `(B13 D5)` in Why it matters. `check-spec.sh` fails on a tag with no Q link and on an Open B13 row that A7 does not name. Phrase it as what we assumed, so a reviewer can answer yes or give a correction. Who is `SME`, `builder`, `client`, or a named role such as `Client IT`. Why it matters says what the answer changes. Leave Answer empty in a draft. Number questions from Q1 and give each an anchor: `[Q1]{#q1}`. Rows for the builder or client show in both copies, so word them in plain terms too.
 
 ## No builder terms in Part A
 

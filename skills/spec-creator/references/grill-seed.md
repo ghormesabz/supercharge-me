@@ -13,7 +13,9 @@ The grill settles everything the spec needs before any file is written. `superch
 - Do not save the grill to disk. The spec holds what was settled.
 - There is no round cap. The grill ends when the frontier is empty or the user says "enough".
 - Anything left unsettled becomes an Open question in A7 or a row in B13, with an owner: SME, builder or client.
-- Write nothing until the user answers "yes" to the restate. "Sounds good" and "whatever you think" are not yes. Ask what they would change.
+- Write nothing until the user answers "yes" to the restate. "Sounds good" and "whatever you think" are not yes. Ask what they would change. The restate holds everything the spec will say, risks included, so that one yes is the only gate. A reply of "sounds good" to a round is not a gate to chase, because the restate asks again.
+- One proposition per question. A question with two parts cannot be accepted with one "yes". Split it, and ask the second in the same round as a separate numbered question.
+- Where the context prescribes a schema, a list, a name set or a decision, the spec may extend or change it only in view. Each such addition goes to the user as its own question and appears in the restate under Departures from context.
 - **Principles round.** When Systems and data and Constraints are settled, put the relevant principles from [principles.md](principles.md) (or the `--principles` file) to the user in one round. Each carries its default as the recommendation and a one-line consequence for this build. Skip the ones that cannot apply and say which. An override or a skipped principle becomes a B13 row.
 - **Decisions are three-way.** For every structural decision, the recommendation names its status: Locked (why), Deferred (what event unlocks it), or Experiment (what kills it). A one-way door is Locked only when an answer is needed to start slice 1. Everything else defers.
 - **Backwards compatibility defaults to deferred.** Unless the user says a consumer exists today, record D-compat as Deferred with the trigger "first consumer outside the repo, or first tagged release". Error handling defaults to fail loud.
@@ -77,8 +79,10 @@ Principles:          {{adopted, overridden, not applicable, each with its reason
 Decisions:           {{Locked with reason; Deferred with trigger; Experiment with kill condition}}
 Slice 1 scaffold:    {{the modules and directories slice 1 may create}}
 Out of scope:        {{items}}
+Risks:               {{each risk, the response and the owner}}
 Acceptance:          {{the first slice and its done-when}}
 Open questions:      {{each with an owner}}
+Departures from context: {{each place the spec adds to or changes what the context prescribes, or none}}
 Design source:       {{path, skill, spec folder or neutral}}
 First read it differently: {{where the first inference diverged, or no divergence}}
 Mode:                {{draft or final}}

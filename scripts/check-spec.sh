@@ -38,6 +38,14 @@ if [ "$static" -eq 0 ]; then
   else
     pass "outputs exist: $need"
 
+    stale=""
+    for f in $need; do [ "$spec" -nt "$dir/$f" ] && stale="$stale $f"; done
+    if [ -n "$stale" ]; then
+      fail "older than spec.qmd:$stale (a render may have failed; run render.sh)"
+    else
+      pass "outputs are newer than spec.qmd"
+    fi
+
     if [ "$mode" = draft ]; then
       n="$(count 'id="part-b"' "$dir/design-review.html")"
       if [ "$n" = 1 ]; then pass "Part B present once in design-review.html"; else fail "design-review.html shows Part B $n times, expected 1 (does this Quarto ignore when-meta?)"; fi
@@ -66,6 +74,18 @@ fi
 hits="$(grep -n -E '\{\{|<!--' "$spec" || true)"
 if [ -z "$hits" ]; then pass "no placeholders or HTML comments in spec.qmd"; else fail "placeholders or HTML comments in spec.qmd:"; printf '%s\n' "$hits" | indent; fi
 
+# --- Contract names on pipe arrows ------------------------------------------
+# A .hand label is 5.5rem wide and breaks mid-word past about 10 characters.
+maxhand=10
+long="$(awk -v max="$maxhand" '
+  /^:+[ \t]*\{[^}]*\.hand/ { on = 1; next }
+  /^:+[ \t]*$/ { on = 0; next }
+  on && /`/ {
+    s = $0; gsub(/[` \t]/, "", s)
+    if (s !~ /^\{\{/ && length(s) > max) printf("line %d: %s is %d characters\n", NR, s, length(s))
+  }' "$spec")"
+if [ -z "$long" ]; then pass "contract names on arrows fit ($maxhand characters or fewer)"; else fail "contract names over $maxhand characters wrap mid-word in the figure. Shorten each in B2, B5 and everywhere else it appears:"; printf '%s\n' "$long" | indent; fi
+
 # --- Writing rules ----------------------------------------------------------
 em="$(grep -n $'\xe2\x80\x94' "$spec" || true)"
 if [ -z "$em" ]; then pass "no em dashes"; else fail "em dashes:"; printf '%s\n' "$em" | indent; fi
@@ -79,6 +99,20 @@ if [ -z "$filler" ]; then pass "no filler adverbs"; else review "filler adverbs.
 # --- Builder terms in Part A -------------------------------------------------
 terms="$(sed -n '/^# For domain review/,/^# For the build team/p' "$spec" | grep -n -i -w -E '(llm|api|sql|json|schema|vector|token|prompt|endpoint|pipeline|embedding|latency|p95|container)s?' || true)"
 if [ -z "$terms" ]; then pass "no builder terms in Part A"; else review "builder terms in Part A. Replace each, or gloss it if the expert used it:"; printf '%s\n' "$terms" | indent; fi
+
+# --- Claim tags and Q links ---------------------------------------------------
+# Every Interpreted, Assumption or Open tag past the legend carries a Q link to A7.
+untied="$(awk '
+  /^# For domain review/ { on = 1 }
+  on && /\{\.tag \.(assumption|interpreted|open)\}/ && !/\{\.qref\}/ { printf("line %d: %s\n", NR, substr($0, 1, 70)) }
+' "$spec")"
+if [ -z "$untied" ]; then pass "every Interpreted, Assumption and Open tag has a Q link"; else fail "tags with no Q link to A7:"; printf '%s\n' "$untied" | indent; fi
+
+anchors=""
+for q in $(grep -o '(#q[0-9][0-9]*)' "$spec" | sort -u | tr -d '()#'); do
+  grep -q "{#$q}" "$spec" || anchors="$anchors $q"
+done
+if [ -z "$anchors" ]; then pass "every Q link has an anchor in A7"; else fail "Q links with no anchor:$anchors"; fi
 
 # --- Secrets -----------------------------------------------------------------
 rigid='(sk|pk)-[A-Za-z0-9_-]{20,}|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{30,}|xox[baprs]-[A-Za-z0-9-]{10,}|Bearer [A-Za-z0-9._~+/=-]{20,}|[A-Za-z][A-Za-z0-9+.-]*://[^[:space:]/:@]+:[^[:space:]/@]+@'
@@ -109,6 +143,15 @@ else
       }
     }')"
   if [ -n "$bad" ]; then fail "B13 register:"; printf '%s\n' "$bad" | indent; else pass "B13 statuses valid and every row has its reason, trigger, kill condition or owner"; fi
+  a7="$(awk '/^## A7/ {on=1; next} on && /^#/ {exit} on {print}' "$spec")"
+  noa7=""
+  for id in $(printf '%s\n' "$reg" | awk -F'|' '
+    function trim(s) { gsub(/^[ \t]+|[ \t]+$/, "", s); return s }
+    NR == 1 || $0 ~ /^\|[ \t]*:?-+/ { next }
+    trim($4) == "Open" { print trim($2) }'); do
+    printf '%s\n' "$a7" | grep -q -w -- "$id" || noa7="$noa7 $id"
+  done
+  if [ -z "$noa7" ]; then pass "every Open row in B13 is named in A7"; else fail "Open rows in B13 not named in A7 (add a row that names the ID):$noa7"; fi
   if printf '%s\n' "$reg" | grep -q 'D-compat'; then pass "B13 holds the D-compat row"; else fail "B13 is missing the D-compat row"; fi
 fi
 
