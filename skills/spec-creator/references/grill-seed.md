@@ -1,6 +1,6 @@
 # Grill seed
 
-The grill settles everything the spec needs before any file is written. `mahan-skills:interview-me` runs the rounds in Rounds Mode. This file gives it the tree. The rules below override the hook where they differ.
+The grill settles everything the spec needs before any file is written. `supercharge-me:interview-me` runs the rounds in Rounds Mode. This file gives it the tree. The rules below override the hook where they differ.
 
 ## Rules
 

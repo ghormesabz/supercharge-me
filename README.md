@@ -1,56 +1,136 @@
-# mahan-skills
+<h1 align="center">supercharge-me</h1>
 
-Skills for converging with the model before building. A grill settles intent, a house HTML format makes Quarto output look designed, and a spec creator fixes the expensive structural decisions and defers the rest, so the coding agent's first scaffold is small and correct.
+<p align="center">
+  <em>Settle what you want first. Then let the agent build it.</em>
+</p>
 
-Version 0.2.0. MIT.
+<p align="center">
+  Four skills for Claude Code: a grill, a spec creator, a house HTML format and a session handoff.
+</p>
 
-| Skill | Invoked by | Does |
-|:--|:--|:--|
-| `interview-me` | the model, on build, idea, plan or design asks where its first reading could differ from yours | Sequential or rounds grill that ends in a restate you confirm with an explicit yes |
-| `quarto-authoring` | the model, when an HTML deliverable is needed | The `house-html` Quarto format: one reading column, one accent, flat surfaces, light and dark. Frontmatter is five lines |
-| `spec-creator` | you: `/mahan-skills:spec-creator` | Grill, then `spec.qmd` with a decision register, then HTML for reviewers and builders, then `AGENTS.md` for the agent |
-| `handoff` | the model, on "hand this over" or "I'm out of context"; or you: `/mahan-skills:handoff` | Saves goal, decisions, files, open questions and next steps as XML in the temp folder. A new session in the same folder is offered it at start |
+---
 
-## spec-creator
+You know how it goes. You hand the agent a folder of domain notes and a one-line ask. It starts scaffolding straight away: a database layer, an auth module, a plugin system, a config loader. None of it came from you. It came from the agent's guess about what a project like yours usually needs.
+
+Then you are stuck. Every later session reads that scaffold as fact and builds on it. The rules got baked in before anyone agreed to them, and you spend the project working around them.
+
+The context was there. It got lost between your notes and the build plan. supercharge-me closes that gap. The model grills you until it can say back what you want and you say yes. The answers become a spec that records every structural decision with a reason. The agent then starts from a brief that lets it build only what the first slice names.
+
+## Before / after
+
+You ask for "a dashboard for the intake team".
+
+**Without it**, the agent picks a framework, invents the metrics, adds user accounts and charts, and writes thirty files. A week later you find out the team wanted one number in standup.
+
+**With it**, `interview-me` writes down its first guess and how sure it is, then asks one question at a time, each with its guess attached. Who reads it? What decision does it change? What does good look like, as a number? It ends with a restate, including what is out of scope and where its first reading was wrong, and waits for your explicit yes. `spec-creator` turns that into a spec where user accounts are **Deferred** until a named trigger fires, so slice 1 builds the one number and nothing else.
+
+## The skills
+
+### interview-me
+
+The model calls it on its own when a build, plan or design ask could mean more than one thing. **Sequential** mode asks one question at a time. **Rounds** mode works a whole tree of linked decisions, asking every question it can answer now in one round. Both attach a recommended answer to each question, look up facts themselves instead of asking you, and stop only at a restate you confirm. "Sounds good" does not count as yes.
+
+### spec-creator
+
+You run it: `/supercharge-me:spec-creator`. It grills you with `interview-me`, then writes `spec.qmd` and renders it.
+
+- **Draft** gives a `design-review.html` for reviewers to answer, solo or in a meeting.
+- **Final** folds the review back in and writes a `design-sheet.html` for people who do not build, a `build-spec.html` for people who do, and `AGENTS.md` plus `CLAUDE.md` at the repo root for the coding agent.
+
+Every structural decision in the register is **Locked** with a reason, **Deferred** with a trigger, or an **Experiment** with a kill condition. Slice 1 gets a scaffold budget. Errors fail loud until the register says otherwise. After hand-off only the register changes; `AGENTS.md` never does.
+
+### quarto-authoring
+
+The model calls it when you need an HTML deliverable: a report, memo, briefing note or one-pager. It installs the `house-html` Quarto format: one reading column, one accent, flat surfaces, light and dark. Frontmatter is five lines because the design lives in the format. A `tokens.css` swaps in your brand's colours, fonts and logo, and nothing else.
+
+### handoff
+
+Say "hand this over" or "I'm out of context", or run `/supercharge-me:handoff`. It saves the goal, decisions, files, open questions, next steps and rejected options as one XML file. The next session you open in the same workspace is told one is waiting, and reads it only after you say yes.
+
+## How it works
 
 ```
-/mahan-skills:spec-creator [context] [--mode draft|final|check] [--design NAME|PATH]
-                           [--principles PATH] [--out DIR] [--slug SLUG] [--help]
+idea ─► interview-me ─► spec-creator draft ─► review ─► spec-creator final ─► AGENTS.md ─► build slice 1
+          (restate,        (spec.qmd,                     (design sheet,
+           explicit yes)    design review)                 build spec)
+
+handoff: any time a session runs long; the next session picks it up
 ```
 
-Flags are read from chat, so plain English works ("do the final pass"). Output lands in `OUT/docs/spec/SLUG/`:
-
-- **draft**: `spec.qmd` and `design-review.html`, a working document to answer solo or in an interview.
-- **final**: `design-sheet.html` for non-builders, `build-spec.html` for builders, plus `AGENTS.md` and `CLAUDE.md` (`@AGENTS.md`) at the repo root.
-
-Every structural decision is Locked with a reason, Deferred with a trigger, or an Experiment with a kill condition. Slice 1 gets a scaffold budget. Errors fail loud until the register says otherwise. After hand-off only the register changes; `AGENTS.md` never does.
-
-Design systems change colours, fonts and a logo only (`--design`). Principles are shipped defaults in `skills/spec-creator/references/principles.md`; `--principles` swaps them.
-
-## handoff
-
-Writes one XML file per folder to the system temp folder (`$TMPDIR/mahan-skills/handoff-<hash of the folder's real path>.xml`, or `$MAHAN_HANDOFF_DIR`). `scripts/handoff.py write` rejects XML that is not well-formed and stamps `created`, `workspace`, `branch` and `head` itself. A `SessionStart` hook (`startup` and `clear`) tells the model a handoff is waiting for the folder; it reads the file only after you say yes, then deletes it.
+Each step stops before writing anything until you say yes, and nothing is committed without your yes. The register is the one place decisions live, so the agent asks before it guesses a structural decision.
 
 ## Install
 
+In Claude Code, as two separate prompts:
+
 ```
-claude plugin marketplace add ./mahan-skills      # or <owner>/mahan-skills from GitHub
-claude plugin install mahan-skills@mahan
+/plugin marketplace add ghormesabz/supercharge-me
+```
+```
+/plugin install supercharge-me@supercharge-me
 ```
 
-To try it for one session: `claude --plugin-dir ./mahan-skills`.
+From a local clone: `claude plugin marketplace add ./supercharge-me`, then the same install. To try it for one session without installing: `claude --plugin-dir ./supercharge-me`.
 
-## Requirements
+### Requirements
 
-Quarto 1.7 or later, git, Python 3.9 or later. Optional: `uv` (initialises a Python project at the commit step), Chrome or Chromium (figure screenshots). A `SessionStart` hook warns when a required tool is missing; `bash scripts/preflight.sh --full` checks everything.
+Built for Claude Code on macOS with bash.
+
+| Tool | Needed for |
+|:--|:--|
+| Quarto 1.7 or later | `spec-creator`, `quarto-authoring` |
+| git | `spec-creator` (commits and tags the draft) |
+| Python 3.9 or later | `handoff` and its session-start hook |
+| `uv` (optional) | Initialising a Python project at the commit step |
+| Chrome or Chromium (optional) | Figure screenshots in the spec check |
+
+On a new Mac, `xcode-select --install` provides git and Python. `spec-creator` runs `bash scripts/preflight.sh --full` before it starts; run it yourself to check everything.
+
+## Commands
+
+| Command | What it does |
+|:--|:--|
+| `/supercharge-me:spec-creator` | Grill, then write and render the spec. Defaults to a draft |
+| `/supercharge-me:spec-creator --mode final` | Fold the review back in, render the final copies, write `AGENTS.md` |
+| `/supercharge-me:spec-creator --mode check` | Run the checks on an existing spec. Writes nothing |
+| `/supercharge-me:handoff` | Save this session for the next one |
+
+`interview-me` and `quarto-authoring` have no command; the model calls them when they fit. Ask for them by name if it does not.
+
+`spec-creator` flags:
+
+```
+/supercharge-me:spec-creator [context] [--mode draft|final|check] [--design NAME|PATH]
+                             [--principles PATH] [--out DIR] [--slug SLUG] [--help]
+```
+
+Flags are read from chat, so plain English works: "do the final pass" is `--mode final`. Output lands in `OUT/docs/spec/SLUG/`. `--design` changes colours, fonts and a logo only. `--principles` swaps the shipped defaults in `skills/spec-creator/references/principles.md`.
 
 ## Check it works
 
 ```
-bash scripts/render-example.sh        # renders the worked example in a scratch folder
+bash scripts/preflight.sh --full      # required and optional tools
+bash scripts/render-example.sh        # renders the worked example spec in a scratch folder
 bash scripts/check-spec.sh SPEC_DIR   # mechanical done-checks on a spec folder
-bash scripts/figure-shots.sh HTML     # one PNG per figure
+bash scripts/figure-shots.sh HTML     # one PNG per figure, to look at
 ```
+
+## FAQ
+
+**Does it work with other agents?**
+No. It is built and tested for Claude Code on macOS. The skills are plain Markdown, so they may work elsewhere, but nothing outside Claude Code is supported.
+
+**Do I need Quarto for everything?**
+No. `interview-me` and `handoff` need no Quarto. Only the HTML skills do.
+
+**Why does it ask so many questions?**
+Four to six questions cost minutes. A wrong scaffold costs the project. It stops once it can predict how you would answer its next three questions.
+
+**Where does the handoff go?**
+One file per workspace in the system temp folder: `$TMPDIR/supercharge-me/`. The workspace is the enclosing git root, or the folder itself outside a repo. macOS clears temp files that go unused for about three days, so set `SUPERCHARGE_HANDOFF_DIR` to keep them longer. The skill never writes secrets into it, and the file is deleted once picked up.
+
+**Why does `AGENTS.md` never change?**
+It holds rules only. The project's decisions live in the spec's register, and its commands live in the toolchain. A brief that never changes cannot drift out of date.
 
 ## Add a skill
 
@@ -58,4 +138,4 @@ Drop `skills/<name>/SKILL.md` in this folder. Set `disable-model-invocation: tru
 
 ## Licence
 
-MIT. Portions derive from Matt Pocock's skills (also MIT); see `NOTICE`.
+MIT. Portions derive from Matt Pocock's skills (also MIT); see [NOTICE](NOTICE).

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Checks the tools mahan-skills needs and prints only problems.
-#   preflight.sh          Hook mode. Required problems only. Always exits 0.
+# Checks the tools supercharge-me needs and prints only problems.
+#   preflight.sh          Quiet mode. Required problems only. Always exits 0.
 #   preflight.sh --full   Also prints optional-tool notes. Exits 1 if a required tool is missing.
 # Written for bash 3.2 (macOS default).
 set -u
@@ -11,10 +11,20 @@ full=0
 required_problems=""
 optional_notes=""
 
-add_required() { required_problems="${required_problems}mahan-skills: $1
+add_required() { required_problems="${required_problems}supercharge-me: $1
 "; }
-add_optional() { optional_notes="${optional_notes}mahan-skills (optional): $1
+add_optional() { optional_notes="${optional_notes}supercharge-me (optional): $1
 "; }
+
+# macOS ships /usr/bin/git and /usr/bin/python3 as stubs that open an install
+# dialog until the Command Line Tools are installed, so command -v is not enough.
+have() {
+  p="$(command -v "$1" 2>/dev/null)" || return 1
+  case "$p" in
+    /usr/bin/git|/usr/bin/python3) xcode-select -p >/dev/null 2>&1 ;;
+  esac
+}
+clt="Install the Command Line Tools with: xcode-select --install"
 
 if command -v quarto >/dev/null 2>&1; then
   version="$(quarto --version 2>/dev/null | head -n 1)"
@@ -33,8 +43,8 @@ else
   add_required "Quarto not found. spec-creator and quarto-authoring need Quarto 1.7 or later: https://quarto.org/docs/get-started/"
 fi
 
-command -v git >/dev/null 2>&1 || add_required "git not found. spec-creator tags the draft with git."
-command -v python3 >/dev/null 2>&1 || add_required "python3 not found. handoff and its session-start hook need Python 3.9 or later."
+have git || add_required "git not found. spec-creator tags the draft with git. $clt"
+have python3 || add_required "python3 not found. handoff and its session-start hook need Python 3.9 or later. $clt"
 
 if [ "$full" -eq 1 ]; then
   command -v uv >/dev/null 2>&1 || add_optional "uv not found. Needed only to init a Python project at the commit step."

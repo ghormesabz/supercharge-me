@@ -106,7 +106,7 @@ You are done when you can predict the user's reaction to the next three question
 
 A confirmed statement of intent: the sequential restate, or the settled tree and its restate. Specs, plans and tasks consume it downstream.
 
-Offer to save it to `docs/intent/[topic].md` for multi-session work or a handoff, and save only after the explicit yes. If the ask is a build, offer the user `/mahan-skills:spec-creator` with the restate as context; it is user-invoked, so the user runs it.
+Offer to save it to `docs/intent/[topic].md` for multi-session work or a handoff, and save only after the explicit yes. If the ask is a build, offer the user `/supercharge-me:spec-creator` with the restate as context; it is user-invoked, so the user runs it.
 
 ## Common rationalisations
 

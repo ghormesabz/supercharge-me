@@ -115,7 +115,7 @@ fi
 # --- Hand-off files (final only) ----------------------------------------------
 if [ "$mode" = final ]; then
   case "$dir" in
-    */docs/spec/*)
+    docs/spec/*|*/docs/spec/*)
       root="$(cd "$dir/../../.." 2>/dev/null && pwd)"
       if [ -f "$root/AGENTS.md" ]; then
         lines="$(wc -l < "$root/AGENTS.md" | tr -d ' ')"

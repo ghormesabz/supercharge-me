@@ -1,6 +1,6 @@
 # Design
 
-`--design` changes the look and nothing else: colour roles, font families and a logo. The layout lives in the house format and `figures.css`, which read 16 tokens. Branding means writing a `tokens.css` that overrides some of them. The token table, contrast rule, font rule and logo rule are in `mahan-skills:quarto-authoring`, [references/tokens.md](../../quarto-authoring/references/tokens.md). Read it before this step.
+`--design` changes the look and nothing else: colour roles, font families and a logo. The layout lives in the house format and `figures.css`, which read 16 tokens. Branding means writing a `tokens.css` that overrides some of them. The token table, contrast rule, font rule and logo rule are in `supercharge-me:quarto-authoring`, [references/tokens.md](../../quarto-authoring/references/tokens.md). Read it before this step.
 
 ## Find the source
 

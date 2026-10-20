@@ -1,14 +1,14 @@
 ---
 name: handoff
-description: Saves the state of this session as a compact XML handoff in the temp folder so a fresh session in the same folder can pick it up. A SessionStart hook offers it when one is opened there. Use only when the user says "hand this over", "save my progress", "I'm out of context", or invokes /mahan-skills:handoff. Skip for summaries meant to be read by people.
+description: Saves the state of this session as a compact XML handoff in the temp folder so a fresh session in the same folder can pick it up. A SessionStart hook offers it when one is opened there. Use only when the user says "hand this over", "save my progress", "I'm out of context", or invokes /supercharge-me:handoff. Skip for summaries meant to be read by people.
 disable-model-invocation: true
 ---
 
 # Handoff
 
-Saves where we are, so the next session starts warm. Writes one XML file for this folder. Never edits anything in the workspace.
+Saves where we are, so the next session starts warm. Writes one XML file for this workspace (the git root, or this folder outside a repo). Never edits anything in the workspace.
 
-In this file, the script is `${CLAUDE_SKILL_DIR}/scripts/handoff.py`. Run it from the workspace root, always as `python3 ${CLAUDE_SKILL_DIR}/scripts/handoff.py CMD`.
+In this file, the script is `${CLAUDE_SKILL_DIR}/scripts/handoff.py`. Run it from inside the workspace, always as `python3 ${CLAUDE_SKILL_DIR}/scripts/handoff.py CMD`.
 
 ## Write
 
@@ -43,6 +43,6 @@ In this file, the script is `${CLAUDE_SKILL_DIR}/scripts/handoff.py`. Run it fro
 
 ## Pick up
 
-A `SessionStart` hook (`hooks/hooks.json`) tells the model when a handoff exists for the folder it was opened in. It never loads the file. After the user says yes: `python3 ${CLAUDE_SKILL_DIR}/scripts/handoff.py read`, summarise goal, status and next in three lines, then `python3 ${CLAUDE_SKILL_DIR}/scripts/handoff.py clear` so the next session is not asked again. If `head` differs from the current git HEAD, say so.
+A `SessionStart` hook (`hooks/hooks.json`) tells the model when a handoff exists for the workspace it was opened in. It never loads the file. After the user says yes: `python3 ${CLAUDE_SKILL_DIR}/scripts/handoff.py read`, summarise goal, status and next in three lines, then `python3 ${CLAUDE_SKILL_DIR}/scripts/handoff.py clear` so the next session is not asked again. If `head` differs from the current git HEAD, say so.
 
 To delete one without picking it up: `clear`.

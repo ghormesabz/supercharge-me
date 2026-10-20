@@ -22,11 +22,11 @@ Everything lands under `OUT/docs/spec/SLUG/`, where `OUT` is the repo root:
 
 The figures carry the spec. They show what comes in, what goes out and what happens between, so a reader can check the process without reading the text. HTML is for people. The agent reads `spec.qmd` and `AGENTS.md`.
 
-In this file, `assets/` and `references/` are in `${CLAUDE_SKILL_DIR}`, and scripts are in `${CLAUDE_PLUGIN_ROOT}/scripts/`. Run commands from `OUT`.
+In this file, `assets/` and `references/` are in `${CLAUDE_SKILL_DIR}`, and scripts are in `${CLAUDE_PLUGIN_ROOT}/scripts/`. The reference files write the folder holding that `scripts/` as `PLUGIN`, so `PLUGIN/scripts/preflight.sh` is `${CLAUDE_PLUGIN_ROOT}/scripts/preflight.sh`. Run commands from `OUT`.
 
 ## Flags
 
-`/mahan-skills:spec-creator [context] [--mode draft|final|check] [--design VALUE] [--principles PATH] [--out DIR] [--slug SLUG] [--help]`
+`/supercharge-me:spec-creator [context] [--mode draft|final|check] [--design VALUE] [--principles PATH] [--out DIR] [--slug SLUG] [--help]`
 
 | Flag | Meaning |
 |:--|:--|
@@ -55,9 +55,9 @@ Context is what the user pastes or names by path: files and folders. A folder me
 1. **Parse.** Echo the parsed flags. `--help` prints the table and stops.
 2. **Preflight.** Run `bash ${CLAUDE_PLUGIN_ROOT}/scripts/preflight.sh --full`. A non-zero exit stops the run: relay its message. Then load the hooks per [references/hooks.md](references/hooks.md). A missing hook stops the run.
 3. **Context.** Read what the user supplied. If it holds a secret, follow the Rules before you ask anything.
-4. **Grill.** Call `mahan-skills:interview-me` in Rounds Mode with the tree in [references/grill-seed.md](references/grill-seed.md). It ends with a restate. Wait for an explicit yes before writing anything.
+4. **Grill.** Call `supercharge-me:interview-me` in Rounds Mode with the tree in [references/grill-seed.md](references/grill-seed.md). It ends with a restate. Wait for an explicit yes before writing anything.
 5. **Design.** Follow [references/design.md](references/design.md). Write `tokens.css`.
-6. **Write.** `mkdir -p OUT/docs/spec/SLUG`. Follow `mahan-skills:quarto-authoring` Workflow step 1 to install the house format into that folder. Copy `assets/spec-template.qmd` to `spec.qmd`, and `assets/figures.css` and `assets/render.sh` beside it. Fill every placeholder. Part A: [references/part-a.md](references/part-a.md). Part B: [references/part-b.md](references/part-b.md). Figures: [references/figures.md](references/figures.md). The section lists are fixed and never renumbered.
+6. **Write.** `mkdir -p OUT/docs/spec/SLUG`. Follow `supercharge-me:quarto-authoring` Workflow step 1 to install the house format into that folder. Copy `assets/spec-template.qmd` to `spec.qmd`, and `assets/figures.css` and `assets/render.sh` beside it. Fill every placeholder. Part A: [references/part-a.md](references/part-a.md). Part B: [references/part-b.md](references/part-b.md). Figures: [references/figures.md](references/figures.md). The section lists are fixed and never renumbered.
 7. **Render and check.** `bash OUT/docs/spec/SLUG/render.sh`, then `bash ${CLAUDE_PLUGIN_ROOT}/scripts/check-spec.sh OUT/docs/spec/SLUG` and the manual checks below. Fix and re-render until the script exits 0.
 8. **Report.** List the files and sizes; the number of claims at each tag; the Open questions with owners; the register counts (Locked, Deferred, Experiment, Open); the design source and any tokens left at the default; anything skipped, such as the figure check without a browser. If the design names a web font, say that the viewer's browser fetches it.
 9. **Commit, tag, init: only on a yes.** If `OUT` is not a git repo and the grilled stack is Python, offer `uv init --bare --vcs git` in `OUT` (never plain `uv init`, which adds `main.py` and `README.md`). For any other stack, ask which init to run. Check `git tag -l spec-SLUG-draft`. Ask in plain text: commit `docs/spec/SLUG/` and tag it `spec-SLUG-draft`? If the tag exists, say the question moves it. Do nothing until the user says yes. Then run `git add docs/spec/SLUG && git commit -m "Add SLUG scoping spec for review" -- docs/spec/SLUG` and `git tag spec-SLUG-draft` (`git tag -f` only when the yes covered the move). `--mode final` compares against that tag.

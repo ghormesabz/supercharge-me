@@ -46,7 +46,7 @@ Render at render time with `quarto render doc.qmd --to house-html`.
 
 ## Install paths
 
-- `bash ${CLAUDE_SKILL_DIR}/scripts/install-house.sh DIR` copies the bundled extension. This is the route this plugin uses.
+- The bundled `scripts/install-house.sh DIR` copies the extension. This is the route this plugin uses; Workflow step 1 in `SKILL.md` has the full command.
 - `quarto add <org>/<ext>` installs from GitHub into a project. `quarto use template` installs with a starter `template.qmd`.
 - Copying `_extensions/` by hand is not covered by the docs page. It works because the folder is self-contained; confirm with a test render.
 

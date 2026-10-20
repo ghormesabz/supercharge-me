@@ -7,9 +7,10 @@
   handoff.py clear           Delete the saved handoff.
   handoff.py hook            SessionStart hook: tell the model a handoff is waiting.
 
-The file name comes from the real path of the working folder, so a session opened
-in the same folder finds it and a session opened elsewhere does not. Set
-MAHAN_HANDOFF_DIR to move it off the system temp folder.
+The file name comes from the real path of the workspace: the enclosing git root, or
+the working folder outside a repo. A session opened anywhere in the same workspace
+finds it and a session opened elsewhere does not. Set
+SUPERCHARGE_HANDOFF_DIR to move it off the system temp folder.
 """
 import hashlib
 import json
@@ -23,13 +24,25 @@ from datetime import datetime
 
 
 def handoff_dir():
-    return os.environ.get("MAHAN_HANDOFF_DIR") or os.path.join(
-        os.path.realpath(tempfile.gettempdir()), "mahan-skills"
+    return os.environ.get("SUPERCHARGE_HANDOFF_DIR") or os.path.join(
+        os.path.realpath(tempfile.gettempdir()), "supercharge-me"
     )
 
 
+def workspace(cwd):
+    # Walk up for .git rather than running git, so the hook never touches the
+    # macOS /usr/bin/git stub.
+    here = d = os.path.realpath(cwd)
+    while not os.path.exists(os.path.join(d, ".git")):
+        parent = os.path.dirname(d)
+        if parent == d:
+            return here
+        d = parent
+    return d
+
+
 def handoff_path(cwd):
-    key = hashlib.sha1(os.path.realpath(cwd).encode()).hexdigest()[:12]
+    key = hashlib.sha1(workspace(cwd).encode()).hexdigest()[:12]
     return os.path.join(handoff_dir(), f"handoff-{key}.xml")
 
 
@@ -56,7 +69,7 @@ def cmd_write(cwd):
     root.attrib.clear()
     root.set("version", "1")
     root.set("created", datetime.now().strftime("%Y-%m-%dT%H:%M"))
-    root.set("workspace", os.path.realpath(cwd))
+    root.set("workspace", workspace(cwd))
     branch, head = git(cwd, "branch", "--show-current"), git(cwd, "rev-parse", "--short", "HEAD")
     if branch:
         root.set("branch", branch)
@@ -76,7 +89,7 @@ def cmd_write(cwd):
 def cmd_read(cwd):
     path = handoff_path(cwd)
     if not os.path.exists(path):
-        sys.exit(f"handoff: nothing saved for {os.path.realpath(cwd)}.")
+        sys.exit(f"handoff: nothing saved for {workspace(cwd)}.")
     with open(path, encoding="utf-8") as f:
         sys.stdout.write(f.read())
 

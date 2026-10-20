@@ -60,7 +60,7 @@ The kit uses `:has()` and `color-mix()`, which need an evergreen browser.
 Headless Chrome ignores scroll position, so every screenshot shows the top of the page. `figure-shots.sh` shifts each figure to the top of a scratch copy and takes one screenshot per figure:
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/scripts/figure-shots.sh OUT/docs/spec/SLUG/build-spec.html
+bash PLUGIN/scripts/figure-shots.sh OUT/docs/spec/SLUG/build-spec.html
 ```
 
 On draft, point it at `design-review.html`. It prints the folder holding `fig1.png`, `fig2.png` and so on, in page order: A2, A3, B1, then each B2 pipe. It exits 1 with a message when no browser is installed; then say so in the report.
