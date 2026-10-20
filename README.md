@@ -1,20 +1,16 @@
 <h1 align="center">supercharge-me</h1>
 
 <p align="center">
-  <em>Settle what you want first. Then let the agent build it.</em>
-</p>
-
-<p align="center">
-  Four skills for Claude Code: a grill, a spec creator, a house HTML format and a session handoff.
+  <em>A plugin to help cross the context gap between domain SMEs, builders, and agents</em>
 </p>
 
 ---
 
-You know how it goes. You hand the agent a folder of domain notes and a one-line ask. It starts scaffolding straight away: a database layer, an auth module, a plugin system, a config loader. None of it came from you. It came from the agent's guess about what a project like yours usually needs.
+You hand the agent a folder of domain notes and a one-line ask. It starts scaffolding straight away: a database layer, an auth module, a plugin system, a config loader. None of it came from you. It came from the agent's guess about what a project like yours usually needs.
 
 Then you are stuck. Every later session reads that scaffold as fact and builds on it. The rules got baked in before anyone agreed to them, and you spend the project working around them.
 
-The context was there. It got lost between your notes and the build plan. supercharge-me closes that gap. The model grills you until it can say back what you want and you say yes. The answers become a spec that records every structural decision with a reason. The agent then starts from a brief that lets it build only what the first slice names.
+supercharge-me closes that gap. WIP toolkit with the purpose of accelerating builds especially when interfacing between domain/builders. 
 
 ## Before / after
 
@@ -41,7 +37,7 @@ Every structural decision in the register is **Locked** with a reason, **Deferre
 
 ### quarto-authoring
 
-The model calls it when you need an HTML deliverable: a report, memo, briefing note or one-pager. It installs the `house-html` Quarto format: one reading column, one accent, flat surfaces, light and dark. Frontmatter is five lines because the design lives in the format. A `tokens.css` swaps in your brand's colours, fonts and logo, and nothing else.
+The model calls it when you need an HTML deliverable: a report, memo, briefing note or one-pager. It installs the `house-html` Quarto format: one reading column, one accent, flat surfaces, light only. Frontmatter is five lines because the design lives in the format. A `tokens.css` swaps in your brand's colours, fonts and logo, and nothing else.
 
 ### handoff
 
@@ -79,12 +75,9 @@ Built for Claude Code on macOS with bash.
 | Tool | Needed for |
 |:--|:--|
 | Quarto 1.7 or later | `spec-creator`, `quarto-authoring` |
-| git | `spec-creator` (commits and tags the draft) |
 | Python 3.9 or later | `handoff` and its session-start hook |
 | `uv` (optional) | Initialising a Python project at the commit step |
 | Chrome or Chromium (optional) | Figure screenshots in the spec check |
-
-On a new Mac, `xcode-select --install` provides git and Python. `spec-creator` runs `bash scripts/preflight.sh --full` before it starts; run it yourself to check everything.
 
 ## Commands
 
