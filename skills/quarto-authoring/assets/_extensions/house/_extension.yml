@@ -1,0 +1,30 @@
+title: House HTML
+author: Mahan
+version: 0.1.0
+quarto-required: ">=1.7.0"
+contributes:
+  formats:
+    html:
+      theme: house.scss
+      embed-resources: true
+      toc: false
+      toc-depth: 2
+      toc-title: Contents
+      page-layout: article
+      grid:
+        sidebar-width: 220px
+        body-width: 720px
+        margin-width: 260px
+        gutter-width: 2rem
+      anchor-sections: true
+      smooth-scroll: false
+      link-external-newwindow: true
+      code-copy: hover
+      code-block-bg: false
+      code-block-border-left: false
+      syntax-highlighting: arrow
+      callout-appearance: default
+      callout-icon: false
+      fig-cap-location: bottom
+      lang: en-AU
+      date-format: "D MMMM YYYY"

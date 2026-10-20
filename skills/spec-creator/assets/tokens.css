@@ -1,0 +1,23 @@
+/* Derived from the house defaults. Swap values, keep names. */
+/* No overrides: the house format's defaults apply. To brand the spec, uncomment
+   only the tokens the design changes, then test the contrast pairs in
+   quarto-authoring/references/tokens.md. */
+
+/*
+:root {
+  --ink: #1a1a1a;
+  --ink-soft: #585858;
+  --paper: #ffffff;
+  --paper-alt: #f5f5f2;
+  --line: #d9d9d3;
+  --accent: #1d4ed8;
+  --on-accent: #ffffff;
+  --ok: #1a7f37;
+  --warn: #8a5a00;
+  --bad: #b42318;
+  --font-body: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-head: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --radius: 2px;
+}
+*/

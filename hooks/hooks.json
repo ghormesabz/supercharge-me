@@ -1,0 +1,29 @@
+{
+  "description": "Warn at session start when a tool mahan-skills needs is missing, and offer a saved handoff for this folder",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash",
+            "args": ["${CLAUDE_PLUGIN_ROOT}/scripts/preflight.sh"],
+            "timeout": 15
+          }
+        ]
+      },
+      {
+        "matcher": "startup|clear",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3",
+            "args": ["${CLAUDE_PLUGIN_ROOT}/skills/handoff/scripts/handoff.py", "hook"],
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

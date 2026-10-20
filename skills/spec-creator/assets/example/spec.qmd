@@ -1,0 +1,639 @@
+---
+title: "Complaint triage assistant"
+subtitle: "Scoping spec. Worked example with invented data."
+author: "Spec author"
+date: 2026-10-12
+date-format: "D MMMM YYYY"
+lang: en-AU
+spec-draft: true
+format:
+  house-html:
+    css: [figures.css, tokens.css]
+    toc: true
+    toc-depth: 2
+    syntax-highlighting: none
+---
+
+::: {.content-visible when-meta="spec-draft"}
+::: {.banner}
+**Draft** For review with the complaints team. Nothing here is agreed until the sign-off sheet is complete.
+:::
+:::
+
+::: {.content-hidden when-meta="builder"}
+::: {.note}
+Design sheet. Sections A1 to A7 are for domain review. The build detail is in the build spec.
+:::
+:::
+
+::: {.content-visible when-meta="builder"}
+::: {.note}
+Builder copy. A1 to A7 are the sections for domain review. B1 to B13 are the build detail.
+:::
+:::
+
+::: {.legend}
+- [Confirmed]{.tag .confirmed} From an expert or a document
+- [Interpreted]{.tag .interpreted} Our reading of what we heard
+- [Assumption]{.tag .assumption} Our guess, needs a yes or no
+- [Open]{.tag .open} Unanswered, has an owner
+:::
+
+# For domain review {#part-a}
+
+## A1 Summary and sign-off {#a1}
+
+Harbourline Energy's complaints team reads every complaint and writes every reply from scratch. The assistant reads each complaint, finds the policy wording that applies, and drafts a reply. A complaints officer reviews and sends every reply. The team spends its time on judgement instead of retyping policy.
+
+| Item | Detail | Status |
+|:-----|:-------|:-------|
+| Who it is for | Complaints officers and team leads | [Confirmed]{.tag .confirmed} |
+| Scale | About 1,200 complaints a month, mostly email | [Assumption]{.tag .assumption} [Q1](#q1){.qref} |
+| What it does | Sorts each complaint by type and urgency, finds the policy wording that applies, drafts a reply for the officer | [Interpreted]{.tag .interpreted} [Q2](#q2){.qref} |
+| What it does not do | Send a reply, change a case record or work out a refund | [Confirmed]{.tag .confirmed} |
+| Target | A draft is ready within 2 minutes of a complaint arriving | [Assumption]{.tag .assumption} [Q3](#q3){.qref} |
+| Weekend cover | Who reviews drafts on weekends | [Open]{.tag .open} [Q4](#q4){.qref} |
+
+Sign-off sheet. Reviewers fill in Name, Decision and Date.
+
+| Reviewer role | Name | Decision | Date |
+|:--------------|:-----|:---------|:-----|
+| Complaints team lead | | | |
+| Head of customer operations | | | |
+
+## A2 Context map {#a2}
+
+::: {.fig .column-page}
+::: {.ctx}
+
+::: {.col}
+Comes in
+
+- [person]{.k} **Customer**\
+  Writes in about a problem
+- [data]{.k} **Complaint email**\
+  The complaint as written
+- [data]{.k} **Policy library**\
+  The written complaint and hardship policies
+:::
+
+::: {.hand}
+read by
+:::
+
+::: {.core}
+**Complaint triage assistant**
+
+Reads a complaint, finds the policy wording that applies and drafts a reply.
+
+Human check that stays: the officer reads, edits and sends every reply.
+:::
+
+::: {.hand}
+produces
+:::
+
+::: {.col}
+Goes out
+
+- [data]{.k} **Draft reply**\
+  For the officer to review
+- [data]{.k} **Classification record**\
+  Type, urgency and the reason
+:::
+
+::: {.fence}
+Outside this build
+
+- [system]{.k} **Case management system**
+- [person]{.k} **Payment disputes team**
+- [system]{.k} **Phone and chat channels**
+:::
+
+:::
+
+::: {.cap}
+Figure A2. A complaint comes in as an email and leaves as a draft reply for an officer.
+:::
+:::
+
+## A3 Process flow {#a3}
+
+::: {.fig .column-page}
+::: {.lanes}
+
+::: {.lane .steps}
+Steps
+
+1. Receive
+2. Classify
+3. Find policy
+4. Draft reply
+5. Review and send
+:::
+
+::: {.lane .in}
+Artefacts in
+
+- Complaint email
+- Complaint email
+- Classification record\
+  Policy library
+- Complaint email\
+  Policy excerpt
+- Draft reply
+:::
+
+::: {.lane .person}
+Person
+
+- [-]{.none}
+- [-]{.none}
+- [-]{.none}
+- [-]{.none}
+- Complaints officer
+:::
+
+::: {.lane .tool}
+Tool
+
+- Shared inbox
+- Triage assistant
+- Triage assistant
+- Triage assistant
+- Case management system
+:::
+
+::: {.lane .check}
+Checkpoint
+
+- [-]{.none}
+- [-]{.none}
+- [-]{.none}
+- [-]{.none}
+- Officer approves, edits or rejects the draft [Q5](#q5){.qref}
+:::
+
+::: {.lane .out}
+Artefacts out
+
+- [-]{.none}
+- Classification record
+- Policy excerpt
+- Draft reply
+- Sent reply
+:::
+
+:::
+
+::: {.cap}
+Figure A3. One complaint from arrival to a sent reply. The officer decides at the last step.
+:::
+:::
+
+## A4 Inputs and outputs {#a4}
+
+| Artefact | In or out | Format | Supplied or received by | Notes |
+|:---------|:----------|:-------|:------------------------|:------|
+| Complaint email | In | Email text | Customer, through the shared inbox | Attachments are not read in this build |
+| Policy library | In | Word and PDF documents | Policy team | Size and format not yet known [Q8](#q8){.qref} |
+| Classification record | Internal | Type, urgency and a short reason | Triage assistant | Kept with the case |
+| Policy excerpt | Internal | The clause that applies, with its document name | Triage assistant | |
+| Draft reply | Internal | Plain text, up to 250 words | Triage assistant, for the officer | |
+| Sent reply | Out | Email | Complaints officer, to the customer | Sent from the case management system |
+
+## A5 Domain rules {#a5}
+
+| Rule | Source | Status |
+|:-----|:-------|:-------|
+| Acknowledge a complaint within 1 business day | Complaints handling policy, section 2 | [Confirmed]{.tag .confirmed} |
+| A reply to a hardship complaint names the hardship team | Hardship procedure, section 5 | [Confirmed]{.tag .confirmed} |
+| Never state a refund amount before billing has confirmed it | Team lead interview | [Interpreted]{.tag .interpreted} [Q6](#q6){.qref} |
+| A reply stays under 250 words | Team lead interview | [Assumption]{.tag .assumption} [Q7](#q7){.qref} |
+
+## A6 Out of scope {#a6}
+
+- Sending a reply without an officer. Replies stay a human decision.
+- Changing a case record. The case management system stays as it is.
+- Phone and chat complaints. This build reads email only.
+- Working out refund amounts. Billing owns that.
+- Complaints that go to the payment disputes team.
+
+## A7 Review questions {#a7}
+
+| Q | We assumed | Who | Why it matters | Answer |
+|:--|:-----------|:----|:---------------|:-------|
+| [Q1]{#q1} | About 1,200 complaints arrive a month | SME | Sets how fast a draft must appear and how much to test | |
+| [Q2]{#q2} | The types are the five on the current complaint form | SME | Decides how complaints are sorted | |
+| [Q3]{#q3} | A draft within 2 minutes is fast enough | SME | Sets the speed target | |
+| [Q4]{#q4} | Open: nobody has said who reviews drafts on weekends | Complaints team lead | Decides whether weekend drafts wait until Monday | |
+| [Q5]{#q5} | An officer approves every reply before it is sent | SME | Confirms replies are never sent without a person | |
+| [Q6]{#q6} | "Never state a refund amount" covers every reply, not only hardship ones | SME | Decides how strict the draft check is | |
+| [Q7]{#q7} | 250 words is the longest acceptable reply | SME | Sets the length limit on drafts | |
+| [Q8]{#q8} | Open: the policy library size and format are not known | Client IT | Decides how the policy wording is found | |
+| [Q9]{#q9} | The assistant may read the shared inbox and nothing else in the mail system | Client IT | Decides what access to request | |
+
+::: {.content-visible when-meta="builder"}
+
+# For the build team {#part-b}
+
+## B1 Architecture map {#b1}
+
+::: {.fig .column-screen-inset}
+::: {.arch}
+
+::: {.layer}
+Users
+
+- Complaints officer
+- Team lead
+:::
+
+::: {.bus}
+HTTPS
+:::
+
+::: {.zone}
+Harbourline boundary
+
+::: {.layer}
+Interface
+
+- [UI]{.k} **Triage screen** [new]{.new}\
+  Shows the draft and the policy wording
+- [Mail]{.k} **Shared inbox** [existing]{.existing}\
+  Receives complaint emails
+:::
+
+::: {.bus}
+REST + JSON
+:::
+
+::: {.layer}
+Services
+
+- [Service]{.k} **Triage service** [new]{.new}\
+  Runs intake, triage and review
+- [Service]{.k} **Case management system** [existing]{.existing}\
+  Holds cases and sends replies
+:::
+
+::: {.bus}
+SQL
+:::
+
+::: {.layer}
+Data
+
+- [DB]{.k} **Triage store** [new]{.new}\
+  Keeps classifications and drafts
+- [Index]{.k} **Policy index** [new]{.new}\
+  Finds the policy clause that applies
+:::
+:::
+
+::: {.bus}
+HTTPS
+:::
+
+::: {.layer}
+Outside the boundary
+
+- [LLM]{.k} **Hosted model** [external]{.external}\
+  Classifies and drafts
+:::
+
+:::
+
+::: {.legend}
+- [new]{.new} Built in this project
+- [existing]{.existing} Already in place
+- [external]{.external} Outside the client
+:::
+
+::: {.cap}
+Figure B1. The triage service sits between the shared inbox and the case system, and calls one hosted model.
+:::
+:::
+
+## B2 System flow {#b2}
+
+::: {.fig .column-screen-inset}
+::: {.pipe}
+
+::: {.stage .trigger}
+Trigger
+
+**Email arrives**
+
+A complaint reaches the shared inbox.
+:::
+
+::: {.hand}
+`ComplaintIn`
+:::
+
+::: {.stage .model}
+Model call
+
+**Classify**
+
+Assigns type and urgency.
+
+::: {.alt}
+If it fails: the officer sees the raw email marked not classified.
+:::
+:::
+
+::: {.hand}
+`Classification`
+:::
+
+::: {.stage .store}
+Store
+
+**Find policy**
+
+Looks up the clause that applies.
+
+::: {.alt}
+If it fails: drafting stops and the officer is told.
+:::
+:::
+
+::: {.hand}
+`PolicyExcerpt`
+:::
+
+::: {.stage .model}
+Model call
+
+**Draft reply**
+
+Writes a reply from the clause.
+
+::: {.alt}
+If it fails: the officer sees the clause and writes the reply.
+:::
+:::
+
+::: {.hand}
+`DraftReply`
+:::
+
+::: {.stage .human}
+Person
+
+**Officer review**
+
+Approves, edits or rejects.
+:::
+
+::: {.hand}
+`ApprovedReply`
+:::
+
+::: {.stage .api}
+Service call
+
+**Send reply**
+
+Sends through the case system.
+
+::: {.alt}
+If it fails: the triage screen shows the error to the officer.
+:::
+:::
+
+:::
+
+::: {.cap}
+Figure B2. One complaint through six stages. Every model call has a failure line that names who sees it.
+:::
+:::
+
+## B3 Component register {#b3}
+
+| Component | Kind | Status | Responsibility | Notes |
+|:----------|:-----|:-------|:---------------|:------|
+| Triage screen | UI | new | Shows drafts and policy wording, takes the officer's decision | Slice 2 |
+| Shared inbox | Mail | existing | Receives complaint emails | Read only |
+| Triage service | Service | new | Intake, triage and review | D1, P1 |
+| Case management system | Service | existing | Holds cases, sends replies | Slice 3 |
+| Triage store | DB | new | Keeps classifications, drafts and approvals | D1 |
+| Policy index | Index | new | Finds the policy clause that applies | D4 |
+| Hosted model | LLM | external | Classifies and drafts | D2 |
+
+Module map.
+
+| Module | Interface | Hides | Seam and adapters | Slice |
+|:-------|:----------|:------|:------------------|:------|
+| `intake` | `next_complaint() -> ComplaintIn` | Mailbox protocol and parsing | Mail source: fixture folder, shared inbox | 1 |
+| `triage` | `triage(ComplaintIn) -> DraftReply` | Prompts, clause lookup, model retries | Model client: hosted model, recorded fake | 1 |
+| `review` | `submit(DraftReply, decision) -> ApprovedReply` | Case system write and the audit record | Case system: real system, in-memory fake | 2 |
+
+## B4 Model call cards {#b4}
+
+::: {.card}
+[LLM]{.k} Classify
+
+Purpose
+: Assigns a type and an urgency to one complaint.
+
+Model tier
+: Mid-size, hosted, structured output.
+
+Inputs
+: `ComplaintIn`, with account numbers masked first.
+
+Output
+: `Classification`.
+
+Grounding
+: Prompt context only: the five types and what each means.
+
+Guardrails
+: Output must match the contract or the stage fails loud and the officer sees the raw email. No retry.
+
+Eval
+: 100 labelled complaints from last quarter, accuracy at or above 90% ([Assumption]{.tag .assumption} [Q2](#q2){.qref}).
+
+Fallback
+: The officer sorts the complaint by hand.
+
+Budget
+: 5 seconds for 95% of calls, under 1,500 tokens in and 150 out.
+:::
+
+::: {.card}
+[LLM]{.k} Draft reply
+
+Purpose
+: Writes a reply for the officer from the complaint and the clause that applies.
+
+Model tier
+: Mid-size, hosted, structured output.
+
+Inputs
+: `ComplaintIn` (masked) and `PolicyExcerpt`.
+
+Output
+: `DraftReply`.
+
+Grounding
+: Retrieval: the clause from the policy index. The draft cites it.
+
+Guardrails
+: A draft over 250 words, or one that states a refund amount, fails the check. The stage fails loud and the officer sees the clause.
+
+Eval
+: 20 complaints, each scored by two officers. At least 80% rated usable with light edits.
+
+Fallback
+: The officer writes the reply from the clause.
+
+Budget
+: 15 seconds for 95% of calls, under 3,000 tokens in and 500 out.
+:::
+
+## B5 Data contracts {#b5}
+
+| Contract | Carries | Produced by | Read by |
+|:---------|:--------|:------------|:--------|
+| `ComplaintIn` | The complaint as received | Email arrives | Classify, Draft reply |
+| `Classification` | Type, urgency, reason | Classify | Find policy, Officer review |
+| `PolicyExcerpt` | The clause that applies | Find policy | Draft reply |
+| `DraftReply` | The proposed reply | Draft reply | Officer review |
+| `ApprovedReply` | The reply the officer decided on | Officer review | Send reply |
+
+`ComplaintIn`
+
+```json
+{
+  "complaint_id": "string",
+  "received_at": "ISO 8601 timestamp",
+  "from": "email address",
+  "subject": "string",
+  "body": "string"
+}
+```
+
+`Classification`
+
+```json
+{
+  "complaint_id": "string",
+  "category": "billing | outage | service | hardship | other",
+  "urgency": "routine | urgent",
+  "reason": "string, at most 200 characters"
+}
+```
+
+`PolicyExcerpt`
+
+```json
+{
+  "complaint_id": "string",
+  "document": "string",
+  "clause": "string",
+  "text": "string"
+}
+```
+
+`DraftReply`
+
+```json
+{
+  "complaint_id": "string",
+  "text": "string, at most 250 words",
+  "cites": ["string, clause reference"],
+  "flags": ["hardship | refund_amount | none"]
+}
+```
+
+`ApprovedReply`
+
+```json
+{
+  "complaint_id": "string",
+  "text": "string",
+  "decision": "approved | edited",
+  "approved_by": "string, officer ID"
+}
+```
+
+## B6 Integrations {#b6}
+
+| System | Direction | Protocol | Auth method | Configuration names |
+|:-------|:----------|:---------|:------------|:--------------------|
+| Shared inbox | In | IMAP (mail retrieval) over TLS (encrypted connection) | App password | `MAIL_HOST`, `MAIL_USER`, `MAIL_PASSWORD` |
+| Case management system | Out | REST over HTTPS | Bearer credential | `CASE_API_URL`, `CASE_API_KEY` |
+| Hosted model | Out | HTTPS | API key | `MODEL_API_KEY`, `MODEL_NAME` |
+
+## B7 Runtime and environments {#b7}
+
+Three environments: development on a laptop with the fixture folder and the recorded model fake, test and production in Harbourline's cloud tenant. Configuration comes from environment variables set by the platform. Secrets come from the platform's secret store and never from the repo. A change reaches production through a reviewed pull request, a passing test run, and an approval from the complaints team lead. Hosting stays inside the tenant because the complaint text holds customer data ([Assumption]{.tag .assumption} [Q9](#q9){.qref}).
+
+## B8 Security and privacy {#b8}
+
+Complaint text holds names, addresses and account numbers. Account numbers are masked before any model call (D3). Drafts and classifications are kept for 90 days ([Assumption]{.tag .assumption}). Only officers and team leads read them. The hosted model must not train on inputs: [Open]{.tag .open} with Client IT.
+
+## B9 Non-functional targets {#b9}
+
+| Measure | Target | Basis |
+|:--------|:-------|:------|
+| Draft ready after a complaint arrives | 2 minutes | [Assumption]{.tag .assumption} [Q3](#q3){.qref} |
+| Classification accuracy | 90% or better | [Assumption]{.tag .assumption} [Q2](#q2){.qref} |
+| Availability | Weekdays 7am to 7pm | [Assumption]{.tag .assumption} |
+
+## B10 Tests and acceptance {#b10}
+
+| Check | How it runs | Passes when |
+|:------|:------------|:------------|
+| C1 Intake contract | Run `intake` on every fixture email | Every result matches `ComplaintIn` |
+| C2 Classification eval | Run `triage` on the 100 labelled complaints | Accuracy is 90% or better |
+| C3 Draft eval | Two officers score 20 drafts | 80% or more are usable with light edits |
+| C4 Hardship rule | Run `triage` on the 10 hardship fixtures | Every draft names the hardship team |
+| C5 Refund rule | Run `triage` on 50 fixtures | No draft states a refund amount |
+| C6 Send path | Approve a draft against the in-memory case fake | The fake receives one reply with the right case ID |
+
+## B11 Build plan {#b11}
+
+| Slice | Done when | Scaffold (may create) | Checks |
+|:------|:----------|:----------------------|:-------|
+| 1 Fixture to draft | A fixture email produces a classification and a draft reply on the terminal | `src/intake` (fixture adapter), `src/triage`, `fixtures/` | C1, C2, C4, C5 |
+| 2 Inbox to screen | A real email in the shared inbox shows as a draft on the triage screen within 2 minutes | `src/intake` (inbox adapter), `src/review` (screen path), `ui/` | C1, C3 |
+| 3 Review to case system | An approved reply is sent through the case system | `src/review` (case adapter) | C6 |
+
+## B12 Risks {#b12}
+
+| Risk | Effect | Response | Owner |
+|:-----|:-------|:---------|:------|
+| The model drafts a refund amount | A wrong promise to a customer | C5 fails the build; the guardrail rejects the draft | Builder |
+| The policy library is large or scanned | Clause lookup misses | Read it in slice 2 and decide D4 with the numbers | Client IT |
+| Officers stop reading drafts closely | An error is sent | Officer review stays mandatory (Q5); log every edit | Complaints team lead |
+| The shared inbox is not readable by the service | Slice 2 stalls | Ask for access in week 1 (Q9) | Client IT |
+
+## B13 Decision register {#b13}
+
+| ID | Decision | Status | Why or trigger | Door |
+|:---|:---------|:-------|:---------------|:-----|
+| D-compat | Backwards compatibility handling | Deferred | First consumer outside the repo, or first tagged release | two-way |
+| D1 | Four separate records in the triage store: complaint, classification, draft, approval | Locked | The review screen and the audit trail both read these four | one-way |
+| D2 | Mid-size hosted model for both calls | Experiment | Kill if a smaller tier holds 90% accuracy on C2 | two-way |
+| D3 | Mask account numbers before any model call | Locked | Customer data must not leave Harbourline unmasked (B8) | one-way |
+| D4 | How the policy clause is found | Deferred | After slice 2, if the first lookup misses more than 1 in 10 fixtures | two-way |
+| D5 | Weekend review cover | Open | Complaints team lead (Q4) | two-way |
+| P1 | Core first: the terminal and the screen are adapters over `triage` and `review` | Locked | Slice 1 runs from the terminal and slice 2 adds the screen on the same modules | one-way |
+| P2 | Deep modules | Locked | Three modules; each passes the deletion test | two-way |
+| P3 | Lock the one-way doors only | Locked | D1, D3 and P1 are the only one-way doors; the rest defer | two-way |
+| P4 | Walking skeleton | Locked | Slice 1 is fixture to draft on the terminal | two-way |
+| P5 | No abstraction before the second use | Locked | Each seam in the module map has two adapters | two-way |
+| P6 | Contracts at boundaries | Locked | B5 names five contracts before any code | two-way |
+| P7 | Test at the interface | Locked | C1 to C6 cross module interfaces only | two-way |
+| P8 | One obvious place for each thing | Locked | One folder per module under `src/` | two-way |
+| P9 | Scaffold budget | Locked | Each slice creates only its B11 Scaffold | two-way |
+| P10 | Pure core, effects at the edges | Locked | Not adopted: the work is mostly calls to a model and a store | two-way |
+| P11 | Fail loud | Locked | No silent fallback; each failure line in B2 names who sees it | two-way |
+
+:::

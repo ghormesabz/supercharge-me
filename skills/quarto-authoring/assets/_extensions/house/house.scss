@@ -1,0 +1,391 @@
+/*-- scss:defaults --*/
+
+// House HTML: one reading column, one accent, flat surfaces, system fonts.
+// Hex values below feed Sass maths. The :root block in the rules section
+// republishes them as CSS custom properties; tokens.css overrides those.
+
+$house-ink: #1a1a1a !default;
+$house-ink-soft: #585858 !default;
+$house-paper: #ffffff !default;
+$house-paper-alt: #f5f5f2 !default;
+$house-line: #d9d9d3 !default;
+$house-accent: #1d4ed8 !default;
+$house-ok: #1a7f37 !default;
+$house-warn: #8a5a00 !default;
+$house-bad: #b42318 !default;
+
+$house-font-sans: 'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' !default;
+$house-font-mono: 'ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace' !default;
+
+$font-family-sans-serif: unquote($house-font-sans) !default;
+$font-family-monospace: unquote($house-font-mono) !default;
+
+$body-bg: $house-paper !default;
+$body-color: $house-ink !default;
+$link-color: $house-accent !default;
+$link-decoration: underline !default;
+$link-hover-color: $house-ink !default;
+
+$font-size-base: 1.0625rem !default;
+$line-height-base: 1.6 !default;
+
+$headings-color: $house-ink !default;
+$headings-font-weight: 600 !default;
+$headings-line-height: 1.25 !default;
+$h1-font-size: 1.95rem !default;
+$h2-font-size: 1.55rem !default;
+$h3-font-size: 1.25rem !default;
+$h4-font-size: 1.0625rem !default;
+$h5-font-size: 1rem !default;
+$h6-font-size: 0.9rem !default;
+
+$enable-shadows: false !default;
+$enable-gradients: false !default;
+$enable-rounded: true !default;
+$border-radius: 2px !default;
+$border-radius-sm: 2px !default;
+$border-radius-lg: 2px !default;
+$border-color: $house-line !default;
+
+$code-color: $house-ink !default;
+$table-border-color: $house-line !default;
+$table-cell-padding-y: 0.5rem !default;
+$table-cell-padding-x: 0.75rem !default;
+$toc-color: $house-ink-soft !default;
+
+
+/*-- scss:rules --*/
+
+// ---------------------------------------------------------------- tokens
+:root {
+  --ink: #{$house-ink};
+  --ink-soft: #{$house-ink-soft};
+  --paper: #{$house-paper};
+  --paper-alt: #{$house-paper-alt};
+  --line: #{$house-line};
+  --accent: #{$house-accent};
+  --on-accent: #{$house-paper};
+  --ok: #{$house-ok};
+  --warn: #{$house-warn};
+  --bad: #{$house-bad};
+  --font-body: #{$house-font-sans};
+  --font-head: #{$house-font-sans};
+  --font-mono: #{$house-font-mono};
+  --radius: 2px;
+  --toc-w: 15rem;
+  --page: 70rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ink: #ececea;
+    --ink-soft: #a8a8a2;
+    --paper: #151515;
+    --paper-alt: #1e1e1e;
+    --line: #3a3a37;
+    --accent: #8ab4ff;
+    --on-accent: #151515;
+    --ok: #4cc27a;
+    --warn: #e3a63a;
+    --bad: #ff8a7a;
+    color-scheme: dark;
+  }
+}
+
+// ------------------------------------------------------------------ base
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: var(--font-head);
+  color: var(--ink);
+}
+
+h2, .h2 {
+  margin-top: 2.4rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--line);
+}
+
+h3, .h3 { margin-top: 1.8rem; }
+
+h4, .h4, h5, .h5, h6, .h6 { margin-top: 1.4rem; }
+
+.header-section-number {
+  color: var(--ink-soft);
+  font-weight: 400;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+a:hover { color: var(--ink); }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+ul, ol { padding-left: 1.4rem; }
+li { margin: 0.2rem 0; }
+li::marker { color: var(--ink-soft); }
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  opacity: 1;
+}
+
+blockquote,
+.blockquote {
+  margin: 1.2rem 0;
+  padding: 0.1rem 0 0.1rem 1rem;
+  border-left: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-size: 1em;
+}
+
+// ----------------------------------------------------------- title block
+#title-block-header.quarto-title-block.default {
+  .quarto-title h1.title {
+    margin-bottom: 0.25rem;
+    font-size: 2.25rem;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  .quarto-title .subtitle,
+  p.subtitle {
+    margin: 0 0 1rem;
+    color: var(--ink-soft);
+    font-size: 1.2rem;
+  }
+
+  .quarto-title-meta {
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.9rem;
+  }
+
+  .quarto-title-meta-heading {
+    color: var(--ink-soft);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+}
+
+// ---------------------------------------------------------------- tables
+table,
+.table {
+  width: 100%;
+  margin: 1.4rem 0;
+  border-collapse: collapse;
+  color: var(--ink);
+  font-size: 0.94rem;
+  font-variant-numeric: tabular-nums;
+  --bs-table-bg: transparent;
+  --bs-table-striped-bg: transparent;
+  --bs-table-hover-bg: transparent;
+  --bs-table-border-color: var(--line);
+}
+
+table.table > :not(caption) > * > * {
+  padding: 0.5rem 0.75rem;
+  background-color: transparent;
+  box-shadow: none;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+}
+
+table.table > thead > tr > th {
+  background-color: var(--paper-alt);
+  border-bottom: 1px solid var(--ink);
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+  vertical-align: bottom;
+}
+
+table caption,
+.table caption {
+  padding: 0 0 0.5rem;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+@media (max-width: 767px) {
+  table { display: block; overflow-x: auto; }
+}
+
+// ------------------------------------------------------------------ code
+code {
+  padding: 0.08em 0.3em;
+  border-radius: var(--radius);
+  background: var(--paper-alt);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+}
+
+pre,
+div.sourceCode {
+  margin: 1.2rem 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper-alt);
+}
+
+pre { padding: 0.85rem 1rem; font-size: 0.86rem; line-height: 1.5; }
+
+pre code,
+pre > code {
+  padding: 0;
+  background: transparent;
+  font-size: inherit;
+}
+
+div.sourceCode pre,
+pre.sourceCode {
+  margin: 0;
+  border: 0;
+  background: transparent;
+}
+
+// ---------------------------------------------------------------- figures
+figure { margin: 1.6rem 0; }
+
+figcaption,
+.figure-caption,
+.quarto-float-caption,
+.quarto-figure figcaption {
+  margin-top: 0.4rem;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+// -------------------------------------------------------------- callouts
+// Flat bordered card with a status dot. Only the dot changes colour by type.
+div.callout.callout {
+  margin: 1.4rem 0;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius);
+  background: var(--paper);
+  box-shadow: none;
+
+  .callout-header {
+    padding: 0.7rem 1rem 0.1rem;
+    background: transparent !important;
+  }
+
+  .callout-icon-container,
+  .callout-icon { display: none; }
+
+  .callout-title-container {
+    flex-grow: 1;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .callout-title-container::before {
+    content: "";
+    display: inline-block;
+    width: 0.55em;
+    height: 0.55em;
+    margin-right: 0.55em;
+    border-radius: 50%;
+    background: var(--accent);
+    vertical-align: 0.05em;
+  }
+
+  .callout-body-container { padding: 0.1rem 1rem 0.8rem; }
+
+  &.callout-warning .callout-title-container::before,
+  &.callout-caution .callout-title-container::before { background: var(--warn); }
+
+  &.callout-important .callout-title-container::before { background: var(--bad); }
+}
+
+// --------------------------------------------------------------- contents
+nav[role="doc-toc"] {
+  font-size: 0.88rem;
+
+  ul { list-style: none; }
+
+  a {
+    color: var(--ink-soft);
+    text-decoration: none;
+  }
+
+  a:hover { color: var(--ink); }
+
+  a.active,
+  .active {
+    border-left-color: var(--ink) !important;
+    color: var(--ink) !important;
+    font-weight: 600;
+  }
+}
+
+#toc-title {
+  margin: 0 0 0.5rem;
+  padding: 0;
+  border: 0;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+// ------------------------------------------------------- tabs and details
+.panel-tabset .nav-tabs {
+  border-bottom: 1px solid var(--line);
+
+  .nav-link {
+    border: 0;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    color: var(--ink-soft);
+  }
+
+  .nav-link.active {
+    border-bottom-color: var(--ink);
+    background: transparent;
+    color: var(--ink);
+  }
+}
+
+details {
+  margin: 1rem 0;
+  padding: 0.5rem 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+summary { cursor: pointer; font-weight: 600; }
+
+.footnotes,
+section.footnotes {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+// ----------------------------------------------------------------- print
+@media print {
+  body { background: #fff; color: #000; }
+  nav[role="doc-toc"],
+  #quarto-margin-sidebar { display: none; }
+  a { color: inherit; text-decoration: none; }
+}

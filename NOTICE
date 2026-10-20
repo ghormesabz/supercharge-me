@@ -1,0 +1,19 @@
+mahan-skills
+Copyright (c) 2026 Mahan. Licensed under the MIT License (see LICENSE).
+
+This plugin includes material derived from the following work.
+
+1. Matt Pocock, "skills" (https://github.com/mattpocock/skills)
+   MIT License, Copyright (c) 2026 Matt Pocock. The licence text is in LICENSE.
+
+   - skills/interview-me/SKILL.md, section "Rounds mode": derived from
+     skills/productivity/grilling/SKILL.md.
+   - skills/interview-me/references/loop-workflows.md: derived from
+     skills/in-progress/loop-me/SKILL.md.
+   - skills/spec-creator/references/principles.md, section "Vocabulary":
+     condensed from skills/engineering/codebase-design/SKILL.md.
+
+2. Quarto documentation (https://quarto.org)
+   The digests in skills/quarto-authoring/references/ are condensed
+   paraphrases with links to the source pages. No documentation text is
+   vendored. Check each page against your installed Quarto version.

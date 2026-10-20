@@ -1,0 +1,519 @@
+/* figures.css: layout for the four spec figures, the claim tags, the banner and notes.
+   Reads the 16 tokens defined by the house format and overridden by tokens.css.
+   Never hard-code a colour here. Branding happens in tokens.css only. */
+
+/* ------------------------------------------------------------ shared */
+
+.fig {
+  margin: 1.6rem 0;
+  padding: 1rem 1.1rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper);
+  overflow-x: auto;
+}
+
+.fig p { margin: 0 0 0.3rem; }
+
+.fig ul,
+.fig ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fig li { margin: 0; }
+
+.fig .cap {
+  margin-top: 0.9rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+}
+
+.fig .cap p { margin: 0; }
+
+/* The first paragraph of every column, lane, layer, zone and fence is its label. */
+.col > p:first-child,
+.fence > p:first-child,
+.layer > p:first-child,
+.zone > p:first-child,
+.lane > p:first-child {
+  margin: 0 0 0.5rem;
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+/* Kind chips: [person]{.k}, [UI]{.k} */
+.k {
+  display: inline-block;
+  margin-right: 0.35em;
+  padding: 0 0.4em;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper-alt);
+  color: var(--ink-soft);
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: nowrap;
+  vertical-align: 0.06em;
+}
+
+/* Status chips: [new]{.new}, [existing]{.existing}, [external]{.external} */
+.new,
+.existing,
+.external {
+  display: inline-block;
+  margin-left: 0.35em;
+  padding: 0 0.4em;
+  border: 1px solid var(--ink-soft);
+  border-radius: var(--radius);
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: nowrap;
+  vertical-align: 0.06em;
+}
+
+.new {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.existing {
+  background: transparent;
+  color: var(--ink);
+}
+
+.external {
+  border-style: dashed;
+  background: transparent;
+  color: var(--ink-soft);
+}
+
+.nw { white-space: nowrap; }
+
+/* Arrow label between boxes. A context map, a pipe: both use .hand. */
+.hand {
+  position: relative;
+  display: flex;
+  flex: 0 0 5.5rem;
+  min-width: 5.5rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.25rem;
+  color: var(--ink-soft);
+  font-size: 0.76rem;
+  text-align: center;
+}
+
+.hand p {
+  position: relative;
+  top: -0.75rem;
+  margin: 0;
+}
+
+.hand code {
+  padding: 0;
+  background: transparent;
+  color: var(--ink-soft);
+  font-size: 0.72rem;
+  overflow-wrap: anywhere;
+}
+
+.hand::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  left: 0;
+  border-top: 1px solid var(--ink-soft);
+}
+
+.hand::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 6px solid var(--ink-soft);
+  transform: translateY(-50%);
+}
+
+.hand.dashed::before { border-top-style: dashed; }
+
+/* ---------------------------------------------------- A2 context map */
+
+.ctx {
+  display: grid;
+  grid-template-columns: 1fr auto 1.15fr auto 1fr;
+  gap: 0.75rem;
+  align-items: stretch;
+}
+
+.ctx .col li {
+  margin-bottom: 0.45rem;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.core {
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--paper-alt);
+  font-size: 0.92rem;
+}
+
+.core p:last-child { margin-bottom: 0; }
+
+.fence {
+  grid-column: 1 / -1;
+  padding: 0.6rem 0.8rem;
+  border: 1px dashed var(--ink-soft);
+  border-radius: var(--radius);
+}
+
+.fence ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.fence li {
+  padding: 0.35rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  font-size: 0.88rem;
+}
+
+/* --------------------------------------------------- A3 process flow */
+
+.lanes {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.lane {
+  display: grid;
+  grid-template-columns: 8.5rem 1fr;
+  border-top: 1px solid var(--line);
+}
+
+.lane:first-child { border-top: 0; }
+
+.lane > p:first-child {
+  grid-column: 1;
+  margin: 0;
+  padding: 0.6rem 0.7rem;
+  border-right: 1px solid var(--line);
+  background: var(--paper-alt);
+}
+
+.lane > ul,
+.lane > ol {
+  display: grid;
+  grid-column: 2;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+}
+
+.lane li {
+  min-height: 2.4rem;
+  padding: 0.6rem 0.7rem;
+  border-left: 1px solid var(--line);
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+
+.lane li:first-child { border-left: 0; }
+
+.lane li:has(.none) {
+  background: repeating-linear-gradient(
+    135deg,
+    transparent 0 6px,
+    var(--paper-alt) 6px 12px
+  );
+  color: var(--ink-soft);
+}
+
+.none { opacity: 0.6; }
+
+.steps ol { counter-reset: step; }
+
+.steps li {
+  counter-increment: step;
+  font-weight: 600;
+}
+
+.steps li::before {
+  content: counter(step) ". ";
+  color: var(--ink-soft);
+}
+
+.check > p:first-child { color: var(--ink); }
+
+.check li:not(:has(.none)) { font-weight: 600; }
+
+/* ---------------------------------------------- B1 architecture map */
+
+.arch {
+  display: flex;
+  flex-direction: column;
+}
+
+.layer {
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper);
+}
+
+.layer ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 0.5rem;
+}
+
+.layer li {
+  padding: 0.5rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+
+.bus {
+  position: relative;
+  padding: 0.35rem 0;
+  color: var(--ink-soft);
+  font-size: 0.76rem;
+  text-align: center;
+}
+
+.bus::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  border-left: 1px solid var(--ink-soft);
+}
+
+.bus p {
+  position: relative;
+  display: inline-block;
+  margin: 0;
+  padding: 0 0.4rem;
+  background: var(--paper);
+}
+
+.zone {
+  margin: 0.25rem 0;
+  padding: 0.6rem;
+  border: 1px dashed var(--ink-soft);
+  border-radius: var(--radius);
+}
+
+.legend ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.2rem;
+  margin: 0.6rem 0;
+  padding: 0;
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+  list-style: none;
+}
+
+.legend .new,
+.legend .existing,
+.legend .external { margin-left: 0; margin-right: 0.35em; }
+
+/* ------------------------------------------------- B2 system flow */
+
+.pipe {
+  display: flex;
+  align-items: stretch;
+  margin: 0.25rem 0;
+}
+
+.stage {
+  display: flex;
+  flex: 1 1 8rem;
+  min-width: 8rem;
+  flex-direction: column;
+  padding: 0.7rem 0.75rem;
+  border: 1px solid var(--ink-soft);
+  border-radius: var(--radius);
+  background: var(--paper);
+  font-size: 0.88rem;
+}
+
+.stage > p { margin: 0 0 0.35rem; }
+
+.stage > p:nth-child(1) {
+  color: var(--ink-soft);
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.stage > p:nth-child(2) {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.stage > p:nth-child(3) {
+  color: var(--ink-soft);
+  font-size: 0.84rem;
+}
+
+.stage.model {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.stage.model > p { color: var(--on-accent); }
+
+.stage.api { border-color: var(--ink); }
+
+.stage.store {
+  border-style: double;
+  border-width: 3px;
+  border-color: var(--ink-soft);
+}
+
+.stage.human {
+  border-style: dashed;
+  border-color: var(--ink);
+}
+
+.stage .alt {
+  margin-top: auto;
+  padding-top: 0.45rem;
+  border-top: 1px dashed currentColor;
+  color: var(--bad);
+  font-size: 0.78rem;
+}
+
+.stage.model .alt { color: inherit; }
+
+.stage .alt p { margin: 0; }
+
+/* ------------------------------------------------ B4 model call card */
+
+.card {
+  margin: 1.2rem 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.card > p:first-child {
+  margin: 0;
+  padding: 0.55rem 0.8rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper-alt);
+  font-weight: 600;
+}
+
+.card dl {
+  display: grid;
+  grid-template-columns: 9rem 1fr;
+  margin: 0;
+}
+
+.card dt,
+.card dd {
+  margin: 0;
+  padding: 0.45rem 0.8rem;
+  border-top: 1px solid var(--line);
+}
+
+.card dt {
+  color: var(--ink-soft);
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.card dd { font-size: 0.92rem; }
+
+.card dd p { margin: 0; }
+
+.card dt:first-of-type,
+.card dt:first-of-type + dd { border-top: 0; }
+
+/* -------------------------------------------- notes, banner, claim tags */
+
+.note {
+  margin: 1rem 0;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper-alt);
+  font-size: 0.9rem;
+}
+
+.note p:last-child { margin-bottom: 0; }
+
+.banner {
+  margin: 1rem 0;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--warn);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--warn) 10%, var(--paper));
+  font-size: 0.92rem;
+}
+
+.banner p { margin: 0; }
+
+.banner strong:first-child { color: var(--warn); }
+
+.tag {
+  display: inline-block;
+  padding: 0 0.45em;
+  border: 1px solid currentColor;
+  border-radius: var(--radius);
+  font-size: 0.76rem;
+  font-weight: 600;
+  line-height: 1.55;
+  white-space: nowrap;
+}
+
+.tag.confirmed {
+  border-color: var(--ok);
+  background: var(--ok);
+  color: var(--paper);
+}
+
+.tag.interpreted {
+  color: var(--accent);
+}
+
+.tag.assumption {
+  border-color: var(--warn);
+  background: color-mix(in srgb, var(--warn) 10%, var(--paper));
+  color: var(--warn);
+}
+
+.tag.open {
+  border-color: var(--bad);
+  background: var(--bad);
+  color: var(--paper);
+}
+
+.qref {
+  font-size: 0.85em;
+  white-space: nowrap;
+}

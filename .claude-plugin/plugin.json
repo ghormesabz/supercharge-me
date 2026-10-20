@@ -1,0 +1,11 @@
+{
+  "name": "mahan-skills",
+  "displayName": "Mahan Skills",
+  "version": "0.2.0",
+  "description": "Converge with the model before building: a grill that settles intent, a house HTML format for Quarto, a spec creator that fixes the expensive structural decisions and defers the rest, and a session handoff that a new session in the same folder can pick up.",
+  "author": {
+    "name": "Mahan"
+  },
+  "license": "MIT",
+  "keywords": ["grilling", "spec", "quarto", "design-principles", "agents-md", "handoff"]
+}

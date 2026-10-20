@@ -1,0 +1,21 @@
+---
+title: "Document title"
+subtitle: "Context line"
+author: "Author"
+date: last-modified
+format: house-html
+---
+
+Lead with the decision or the finding, in one or two sentences.
+
+::: {.callout-note title="Headline finding"}
+State the finding that matters most.
+:::
+
+## First section
+
+Body text. Tables are plain Markdown with a header row.
+
+| Item | Value | Note |
+|:-----|------:|:-----|
+| Example | 12 | Right-align numbers with `--:` |

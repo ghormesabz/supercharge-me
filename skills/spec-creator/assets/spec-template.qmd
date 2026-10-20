@@ -1,0 +1,394 @@
+---
+title: "{{Title}}"
+subtitle: "Scoping spec"
+author: "{{Author}}"
+date: "{{YYYY-MM-DD}}"
+date-format: "D MMMM YYYY"
+lang: en-AU
+spec-draft: true
+format:
+  house-html:
+    css: [figures.css, tokens.css]
+    toc: true
+    toc-depth: 2
+    syntax-highlighting: none
+---
+
+::: {.content-visible when-meta="spec-draft"}
+::: {.banner}
+**Draft** For review with {{who reviews the draft}}. Nothing here is agreed until the sign-off sheet is complete.
+:::
+:::
+
+::: {.content-hidden when-meta="builder"}
+::: {.note}
+Design sheet. Sections A1 to A7 are for domain review. The build detail is in the build spec.
+:::
+:::
+
+::: {.content-visible when-meta="builder"}
+::: {.note}
+Builder copy. A1 to A7 are the sections for domain review. B1 to B13 are the build detail.
+:::
+:::
+
+::: {.legend}
+- [Confirmed]{.tag .confirmed} From an expert or a document
+- [Interpreted]{.tag .interpreted} Our reading of what we heard
+- [Assumption]{.tag .assumption} Our guess, needs a yes or no
+- [Open]{.tag .open} Unanswered, has an owner
+:::
+
+# For domain review {#part-a}
+
+## A1 Summary and sign-off {#a1}
+
+{{Two to four sentences: what this is, who uses it, what changes for them.}}
+
+| Item | Detail | Status |
+|:-----|:-------|:-------|
+| Who it is for | {{Roles}} | {{tag}} |
+| Scale | {{Volume and frequency}} | {{tag}} {{Q link}} |
+| What it does | {{One line}} | {{tag}} |
+| What it does not do | {{One line}} | {{tag}} |
+| Target | {{What good looks like, with a number}} | {{tag}} {{Q link}} |
+
+Sign-off sheet. Leave Name, Decision and Date empty until the reviewer fills them.
+
+| Reviewer role | Name | Decision | Date |
+|:--------------|:-----|:---------|:-----|
+| {{SME role}} | | | |
+| {{Client role}} | | | |
+
+## A2 Context map {#a2}
+
+::: {.fig .column-page}
+::: {.ctx}
+
+::: {.col}
+Comes in
+
+- [person]{.k} **{{Who}}**\
+  {{What they do here}}
+- [data]{.k} **{{Artefact}}**
+:::
+
+::: {.hand}
+{{verb}}
+:::
+
+::: {.core}
+**{{The thing}}**
+
+{{One or two sentences.}}
+
+Human check that stays: {{who decides what}}
+:::
+
+::: {.hand}
+{{verb}}
+:::
+
+::: {.col}
+Goes out
+
+- [data]{.k} **{{Artefact}}**
+:::
+
+::: {.fence}
+Outside this build
+
+- [system]{.k} **{{System left alone}}**
+:::
+
+:::
+
+::: {.cap}
+Figure A2. {{One sentence.}}
+:::
+:::
+
+## A3 Process flow {#a3}
+
+::: {.fig .column-page}
+::: {.lanes}
+
+::: {.lane .steps}
+Steps
+
+1. {{Step}}
+2. {{Step}}
+3. {{Step}}
+:::
+
+::: {.lane .in}
+Artefacts in
+
+- {{Artefact}}
+- {{Artefact}}
+- {{Artefact}}
+:::
+
+::: {.lane .person}
+Person
+
+- [-]{.none}
+- [-]{.none}
+- {{Role}}
+:::
+
+::: {.lane .tool}
+Tool
+
+- {{Tool}}
+- {{Tool}}
+- {{Tool}}
+:::
+
+::: {.lane .check}
+Checkpoint
+
+- [-]{.none}
+- [-]{.none}
+- {{What the person decides}}
+:::
+
+::: {.lane .out}
+Artefacts out
+
+- {{Artefact}}
+- {{Artefact}}
+- {{Artefact}}
+:::
+
+:::
+
+::: {.cap}
+Figure A3. {{One sentence.}}
+:::
+:::
+
+## A4 Inputs and outputs {#a4}
+
+| Artefact | In or out | Format | Supplied or received by | Notes |
+|:---------|:----------|:-------|:------------------------|:------|
+| {{Name as in A3}} | {{In, Internal or Out}} | {{Format}} | {{Who}} | {{Notes}} |
+
+## A5 Domain rules {#a5}
+
+| Rule | Source | Status |
+|:-----|:-------|:-------|
+| {{Rule in plain words}} | {{Document or person}} | {{tag}} {{Q link}} |
+
+## A6 Out of scope {#a6}
+
+- {{What is not being built, and why.}}
+
+## A7 Review questions {#a7}
+
+| Q | We assumed | Who | Why it matters | Answer |
+|:--|:-----------|:----|:---------------|:-------|
+| [Q1]{#q1} | {{What we assumed, phrased so a reviewer can say yes or correct it}} | {{SME, builder, client or role}} | {{What the answer changes}} | |
+
+::: {.content-visible when-meta="builder"}
+
+# For the build team {#part-b}
+
+## B1 Architecture map {#b1}
+
+::: {.fig .column-screen-inset}
+::: {.arch}
+
+::: {.layer}
+Users
+
+- {{Role}}
+:::
+
+::: {.bus}
+{{Channel}}
+:::
+
+::: {.zone}
+{{Client boundary name}}
+
+::: {.layer}
+{{Layer name}}
+
+- [{{Kind}}]{.k} **{{Component}}** [new]{.new}\
+  {{One line on what it does}}
+:::
+
+::: {.bus}
+{{Protocol}}
+:::
+
+::: {.layer}
+{{Layer name}}
+
+- [{{Kind}}]{.k} **{{Component}}** [existing]{.existing}\
+  {{One line on what it does}}
+:::
+:::
+
+::: {.layer}
+Outside the boundary
+
+- [{{Kind}}]{.k} **{{Component}}** [external]{.external}\
+  {{One line on what it does}}
+:::
+
+:::
+
+::: {.legend}
+- [new]{.new} Built in this project
+- [existing]{.existing} Already in place
+- [external]{.external} Outside the client
+:::
+
+::: {.cap}
+Figure B1. {{One sentence.}}
+:::
+:::
+
+## B2 System flow {#b2}
+
+::: {.fig .column-screen-inset}
+::: {.pipe}
+
+::: {.stage .trigger}
+Trigger
+
+**{{Stage name}}**
+
+{{One short sentence.}}
+:::
+
+::: {.hand}
+`{{ContractName}}`
+:::
+
+::: {.stage .model}
+Model call
+
+**{{Stage name}}**
+
+{{One short sentence.}}
+
+::: {.alt}
+If it fails: {{who sees it and how}}.
+:::
+:::
+
+:::
+
+::: {.cap}
+Figure B2. {{One sentence.}}
+:::
+:::
+
+## B3 Component register {#b3}
+
+| Component | Kind | Status | Responsibility | Notes |
+|:----------|:-----|:-------|:---------------|:------|
+| {{Name as in B1}} | {{Kind as in B1}} | {{new, existing or external}} | {{One line}} | {{Stack, constraint or decision ID}} |
+
+Module map.
+
+| Module | Interface | Hides | Seam and adapters | Slice |
+|:-------|:----------|:------|:------------------|:------|
+| `{{module}}` | `{{signature}}` | {{What a caller never sees}} | {{Two adapters, or none yet}} | {{1}} |
+
+## B4 Model call cards {#b4}
+
+::: {.card}
+[LLM]{.k} {{Call name}}
+
+Purpose
+: {{One sentence.}}
+
+Model tier
+: {{Small, mid-size or large; hosted or local; structured output or not.}}
+
+Inputs
+: {{Input contract from B5, and any masking.}}
+
+Output
+: {{Output contract from B5.}}
+
+Grounding
+: {{Retrieval, prompt context or none.}}
+
+Guardrails
+: {{Validation and refusal rules. Fails loud, naming who sees it. A retry needs a B13 row.}}
+
+Eval
+: {{How quality is measured, on what data, and the pass mark.}}
+
+Fallback
+: {{What a person does when the call fails.}}
+
+Budget
+: {{Latency target and token counts.}}
+:::
+
+## B5 Data contracts {#b5}
+
+| Contract | Carries | Produced by | Read by |
+|:---------|:--------|:------------|:--------|
+| `{{ContractName}}` | {{A few words}} | {{Stage}} | {{Stage}} |
+
+`{{ContractName}}`
+
+```json
+{
+  "{{field}}": "{{type or allowed values}}"
+}
+```
+
+## B6 Integrations {#b6}
+
+| System | Direction | Protocol | Auth method | Configuration names |
+|:-------|:----------|:---------|:------------|:--------------------|
+| {{System}} | {{In or out}} | {{Protocol}} | {{Method}} | `{{VARIABLE_NAME}}` |
+
+## B7 Runtime and environments {#b7}
+
+{{Environments and how they differ; hosting and why; where configuration and secrets come from; how a change reaches production.}}
+
+## B8 Security and privacy {#b8}
+
+{{Data that must not leave and how it is masked; retention; who reads what; provider terms that matter.}}
+
+## B9 Non-functional targets {#b9}
+
+| Measure | Target | Basis |
+|:--------|:-------|:------|
+| {{Measure}} | {{Number}} | {{Source or tag}} |
+
+## B10 Tests and acceptance {#b10}
+
+| Check | How it runs | Passes when |
+|:------|:------------|:------------|
+| {{Check}} | {{Command or procedure}} | {{Observable result}} |
+
+## B11 Build plan {#b11}
+
+| Slice | Done when | Scaffold (may create) | Checks |
+|:------|:----------|:----------------------|:-------|
+| 1 {{Name}} | {{Observable result}} | {{Modules and directories named in B3}} | {{B10 checks}} |
+
+## B12 Risks {#b12}
+
+| Risk | Effect | Response | Owner |
+|:-----|:-------|:---------|:------|
+| {{Risk}} | {{Effect}} | {{Response}} | {{Owner}} |
+
+## B13 Decision register {#b13}
+
+| ID | Decision | Status | Why or trigger | Door |
+|:---|:---------|:-------|:---------------|:-----|
+| D-compat | Backwards compatibility handling | Deferred | First consumer outside the repo, or first tagged release | two-way |
+| P1 | {{Principle and how it applies here}} | Locked | {{Reason}} | {{one-way or two-way}} |
+
+:::

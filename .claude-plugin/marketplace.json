@@ -1,0 +1,14 @@
+{
+  "name": "supercharge-me",
+  "description": "A vibe-friendly package to support agentic builds",
+  "owner": {
+    "name": "Mahan"
+  },
+  "plugins": [
+    {
+      "name": "supercharge-me",
+      "source": "./",
+      "description": "Grill, house HTML format, spec creator and session handoff. Converge with the model before building."
+    }
+  ]
+}
