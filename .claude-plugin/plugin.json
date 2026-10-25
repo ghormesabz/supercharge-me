@@ -1,7 +1,7 @@
 {
   "name": "supercharge-me",
-  "displayName": "Supercharge Me",
-  "version": "1.0.0",
+  "displayName": "supercharge-me",
+  "version": "1.1.0",
   "description": "Converge with the model before building: a grill that settles intent, a house HTML format for Quarto, a spec creator that fixes the expensive structural decisions and defers the rest, and a session handoff that a new session in the same folder can pick up.",
   "author": {
     "name": "Mahan"
