@@ -41,7 +41,7 @@ The model calls it when you need an HTML deliverable: a report, memo, briefing n
 
 ### handoff
 
-Say "hand this over" or "I'm out of context", or run `/supercharge-me:handoff`. It saves the goal, decisions, files, open questions, next steps and rejected options as one XML file. The next session you open in the same workspace is told one is waiting, and reads it only after you say yes.
+Say "hand this over" or "I'm out of context", or run `/supercharge-me:handoff`. It saves the goal, decisions, files, open questions, next steps and rejected options as one XML file, and marks each fact as verified, stated by you, or inferred. The next session you open in the same workspace is told what the goal was and how old the file is, and reads it only after you say yes.
 
 ## How it works
 
@@ -120,7 +120,7 @@ No. `interview-me` and `handoff` need no Quarto. Only the HTML skills do.
 Four to six questions cost minutes. A wrong scaffold costs the project. It stops once it can predict how you would answer its next three questions.
 
 **Where does the handoff go?**
-One file per workspace in the system temp folder: `$TMPDIR/supercharge-me/`. The workspace is the enclosing git root, or the folder itself outside a repo. macOS clears temp files that go unused for about three days, so set `SUPERCHARGE_HANDOFF_DIR` to keep them longer. The skill never writes secrets into it, and the file is deleted once picked up.
+One file per workspace in `~/.claude/supercharge-me/handoffs/`, which only you can read. The workspace is the enclosing git root, or the folder itself outside a repo. Set `SUPERCHARGE_HANDOFF_DIR` to put it elsewhere. The skill never writes secrets into it. Nothing is deleted: a handoff that is picked up, replaced by a newer one, or older than 14 days moves to `archive/` there, and the next save removes archive entries older than 30 days (`SUPERCHARGE_HANDOFF_KEEP_DAYS`). Files an older version left in `$TMPDIR/supercharge-me/` are still found.
 
 **Why does `AGENTS.md` never change?**
 It holds rules only. The project's decisions live in the spec's register, and its commands live in the toolchain. A brief that never changes cannot drift out of date.
