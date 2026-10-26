@@ -43,6 +43,10 @@ The model calls it when you need an HTML deliverable: a report, memo, briefing n
 
 Say "hand this over" or "I'm out of context", or run `/supercharge-me:handoff`. It saves the goal, decisions, files, open questions, next steps and rejected options as one XML file, and marks each fact as verified, stated by you, or inferred. The next session you open in the same workspace is told what the goal was and how old the file is, and reads it only after you say yes.
 
+### promptmaxx
+
+A skill file to convert your prompt into the version a top professional in the field would ask. Inspired by Felix Rieseberg's depth prompt. User invoked. 
+
 ## How it works
 
 ```
